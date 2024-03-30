@@ -14628,8 +14628,8 @@ hr.horizontal {
   .navbar-vertical.navbar-expand-xs.fixed-end {
     right: 0; }
   .navbar-vertical.navbar-expand-xs .navbar-nav .nav-link {
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
     margin: 0 1rem;
     margin-bottom: 1.5px; }
     .navbar-vertical.navbar-expand-xs .navbar-nav .nav-link .nav-link-text,
@@ -14653,8 +14653,8 @@ hr.horizontal {
     padding-right: 1rem;
     border-radius: 0.125rem; }
   .navbar-vertical.navbar-expand-xs .navbar-nav .nav .nav-link {
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
     padding-left: 15px; }
     .navbar-vertical.navbar-expand-xs .navbar-nav .nav .nav-link > span.sidenav-normal {
       transition: all 0.1s ease 0s; }
@@ -14694,8 +14694,8 @@ hr.horizontal {
     .navbar-vertical.navbar-expand-sm.fixed-end {
       right: 0; }
     .navbar-vertical.navbar-expand-sm .navbar-nav .nav-link {
-      padding-top: 0.75rem;
-      padding-bottom: 0.75rem;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
       margin: 0 1rem;
       margin-bottom: 1.5px; }
       .navbar-vertical.navbar-expand-sm .navbar-nav .nav-link .nav-link-text,
