@@ -18,6 +18,13 @@
                     <input type="text" class="form-control">
                 </div>
                 -->
+                <ul class="navbar-nav justify-content-end"
+                    <li class="nav-item d-flex align-items-centre">
+                        <a href="https://manage.gocardless.com" class ="nav-item d-flex align-items-centre">
+                            <i class="fas circle-dollar-to-slot me-sm-1"></i>
+                        </a>
+                    </li>
+                </ul>
             </div>
             <form method="POST" action="{{ route('logout') }}" class="d-none" id="logout-form">
                 @csrf
