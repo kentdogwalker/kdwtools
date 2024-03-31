@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\Client;
 use App\Models\Pet;
+use League\Csv\Reader;
+use League\Csv\Statement;
 
 class PspUploadController extends Controller
 {
@@ -21,207 +23,207 @@ class PspUploadController extends Controller
             'csv_file' => 'required|file|mimes:csv,txt|max:2048',
         ]);
 
-        $file = $request->file('csv_file');
+        $csvFile = $request->file('csv_file')->getRealPath();
 
-        // Attempt to open the file
-        if (($handle = fopen($file->getRealPath(), 'r')) !== FALSE) {
-            // Truncate the clients table
-            DB::table('clients')->truncate();
+        try {
+            $csv = Reader::createFromPath($csvFile, 'r');
+            $csv->setHeaderOffset(0); // Assumes the first record in your CSV is the header
+            $csv->setDelimiter(',');
+            $csv->setEnclosure('"');
+            // No escape character needed based on your CSV's characteristics
 
-            // Skip the header row
-            fgetcsv($handle);
 
-            while (($row = fgetcsv($handle, 0, ",", "\"")) !== FALSE) {
-                // Handle the case where the row might not have all the expected columns
-                if (count($row) < 146) {
-                    Log::warning('CSV row has fewer columns than expected: ', $row);
-                    continue; // Skip processing this row or handle it as needed
+
+            // Fetch the header row and manually handle duplicates
+            $headers = $csv->fetchOne(); // Fetches the first row of the CSV
+
+            $uniqueHeaders = [];
+
+            foreach ($headers as $index => $header) {
+                $counter = 1;
+                $newHeader = $header;
+                while (in_array($newHeader, $uniqueHeaders)) {
+                    $newHeader = $header . '_' . $counter;
+                    $counter++;
                 }
-
-                try {
-                    // Adjustments for boolean fields
-                    $AltCCEmail = filter_var($row[29], FILTER_VALIDATE_BOOLEAN);
-                    $AltKeyHolder = filter_var($row[39], FILTER_VALIDATE_BOOLEAN);
-                    $Alarmed = filter_var($row[43], FILTER_VALIDATE_BOOLEAN);
-                    $KDWhasKey = filter_var($row[46], FILTER_VALIDATE_BOOLEAN);
-                    $Emg1CCEmail = filter_var($row[67], FILTER_VALIDATE_BOOLEAN);
-                    $Emg1KeyHolder = filter_var($row[77], FILTER_VALIDATE_BOOLEAN);
-                    $Emg2KeyHolder = filter_var($row[92], FILTER_VALIDATE_BOOLEAN);
-                    $Emg3KeyHolder = filter_var($row[107], FILTER_VALIDATE_BOOLEAN);
-                    $RequirePickDrop = filter_var($row[109], FILTER_VALIDATE_BOOLEAN);
-
-                    $BringInMail = filter_var($row[113], FILTER_VALIDATE_BOOLEAN);
-                    $BringInNewspaper = filter_var($row[115], FILTER_VALIDATE_BOOLEAN);
-                    $TakeOutRubbish = filter_var($row[117], FILTER_VALIDATE_BOOLEAN);
-                    $WaterIndoorPlants = filter_var($row[119], FILTER_VALIDATE_BOOLEAN);
-                    $WaterOutdoorPlants = filter_var($row[121], FILTER_VALIDATE_BOOLEAN);
-                    $AdjustAC = filter_var($row[123], FILTER_VALIDATE_BOOLEAN);
-                    $AdjustLights = filter_var($row[125], FILTER_VALIDATE_BOOLEAN);
-                    $AdjustCurtains = filter_var($row[127], FILTER_VALIDATE_BOOLEAN);
-                    $OtherInstructions = filter_var($row[129], FILTER_VALIDATE_BOOLEAN);
-                    $ChargeCardOnFile = filter_var($row[143], FILTER_VALIDATE_BOOLEAN);
-
-                    // Create the client
-                    Client::create([
-                        'ClientID' => $row[0],
-                        'AccountID' => $row[1],
-                        'Status' => $row[2],
-                        'InvoiceType' => $row[3],
-                        'PrimaryStaffID' => $row[4] === '' ? null : intval($row[4]),
-                        'StaffFirstName' => $row[5],
-                        'StaffLastName' => $row[6],
-                        'TeamID' => $row[7] === '' ? null : intval($row[7]),
-                        'TeamMembers' => $row[8],
-                        'Area' => $row[9],
-                        'Type' => $row[10],
-                        'DiaryRef' => $row[11],
-                        'FirstName' => $row[12],
-                        'LastName' => $row[13],
-                        'Email' => $row[14],
-                        'HomePhone' => $row[15],
-                        'WorkPhone' => $row[16],
-                        'MobilePhone' => $row[17],
-                        'Address1' => $row[18],
-                        'Address2' => $row[19],
-                        'Address3' => $row[20],
-                        'AddressTown' => $row[21],
-                        'AddressState' => $row[22],
-                        'AddressZip' => $row[23],
-                        'Run' => $row[24],
-                        'AltFirstName' => $row[25],
-                        'AltLastName' => $row[26],
-                        'AltRelationship' => $row[27],
-                        'AltEmail' => $row[28],
-                        'AltCCEmail' => $AltCCEmail,
-                        'AltHomePhone' => $row[30],
-                        'AltWorkPhone' => $row[31],
-                        'AltMobilePhone' => $row[32],
-                        'AltAddress1' => $row[33],
-                        'AltAddress2' => $row[34],
-                        'AltAddress3' => $row[35],
-                        'AltAddressTown' => $row[36],
-                        'AltAddressState' => $row[37],
-                        'AltAddressZip' => $row[38],
-                        'AltKeyHolder' => $AltKeyHolder,
-                        'AccessDoorImage' => $row[40],
-                        'LockBoxCodeAndLocation' => $row[41],
-                        'LockBoxImage' => $row[42],
-                        'Alarmed' => $Alarmed,
-                        'AlarmInstructions' => $row[44],
-                        'AlarmImage' => $row[45],
-                        'KDWhasKey' => $KDWhasKey,
-                        'ParkingSpaceImage' => $row[47],
-                        'BuildingAccessInstructions' => $row[48],
-                        'AccessKey' => $row[49],
-                        'WalkInfoPhoto' => $row[50],
-                        'WalkInfoKeySafeInstructions' => $row[51],
-                        'WalkInfoDogLeft' => $row[52],
-                        'WalkInfoWalkingInfo' => $row[53],
-                        'WalkInfoFeedingInfo' => $row[54],
-                        'WalkInfoWalkWithOthers' => $row[55],
-                        'WalkInfoHarnessPhoto' => $row[56],
-                        'WalkInfoImportantInfo' => $row[57],
-                        'What3Words' => $row[58],
-                        'WalkInfoExtraPhoto1' => $row[59],
-                        'WalkInfoExtraPhoto2' => $row[60],
-                        'AdminNotes' => $row[61],
-                        'StaffNotes' => $row[62],
-                        'Emg1FirstName' => $row[63],
-                        'Emg1LastName' => $row[64],
-                        'Emg1Relationship' => $row[65],
-                        'Emg1Email' => $row[66],
-                        'Emg1CCEmail' => $Emg1CCEmail,
-                        'Emg1HomePhone' => $row[68],
-                        'Emg1WorkPhone' => $row[69],
-                        'Emg1MobilePhone' => $row[70],
-                        'Emg1Address1' => $row[71],
-                        'Emg1Address2' => $row[72],
-                        'Emg1Address3' => $row[73],
-                        'Emg1AddressTown' => $row[74],
-                        'Emg1AddressState' => $row[75],
-                        'Emg1AddressZip' => $row[76],
-                        'Emg1KeyHolder' => $Emg1KeyHolder,
-                        'Emg1Notes' => $row[78],
-                        'Emg2FirstName' => $row[79],
-                        'Emg2LastName' => $row[80],
-                        'Emg2Relationship' => $row[81],
-                        'Emg2Email' => $row[82],
-                        'Emg2HomePhone' => $row[83],
-                        'Emg2WorkPhone' => $row[84],
-                        'Emg2MobilePhone' => $row[85],
-                        'Emg2Address1' => $row[86],
-                        'Emg2Address2' => $row[87],
-                        'Emg2Address3' => $row[88],
-                        'Emg2AddressTown' => $row[89],
-                        'Emg2AddressState' => $row[90],
-                        'Emg2AddressZip' => $row[91],
-                        'Emg2KeyHolder' => $Emg2KeyHolder,
-                        'Emg2Notes' => $row[93],
-                        'Emg3FirstName' => $row[94],
-                        'Emg3LastName' => $row[95],
-                        'Emg3Relationship' => $row[96],
-                        'Emg3Email' => $row[97],
-                        'Emg3HomePhone' => $row[98],
-                        'Emg3WorkPhone' => $row[99],
-                        'Emg3MobilePhone' => $row[100],
-                        'Emg3Address1' => $row[101],
-                        'Emg3Address2' => $row[102],
-                        'Emg3Address3' => $row[103],
-                        'Emg3AddressTown' => $row[104],
-                        'Emg3AddressState' => $row[105],
-                        'Emg3AddressZip' => $row[106],
-                        'Emg3KeyHolder' => $Emg3KeyHolder,
-                        'Emg3Notes' => $row[108],
-                        'RequirePickDrop' => $RequirePickDrop,
-                        'PickupInstructions' => $row[110],
-                        'DropOffInstructions' => $row[111],
-                        'WetInstructions' => $row[112],
-                        'BringInMail' => $BringInMail,
-                        'MailInstructions' => $row[114],
-                        'BringInNewspaper' => $BringInMail,
-                        'NewspaperInstructions' => $row[116],
-                        'TakeOutRubbish' => $TakeOutRubbish,
-                        'RubbishInstructions' => $row[118],
-                        'WaterIndoorPlants' => $WaterIndoorPlants,
-                        'IndoorPlantInstructions' => $row[120],
-                        'WaterOutdoorPlants' => $WaterOutdoorPlants,
-                        'OutdoorPlantInstructions' => $row[122],
-                        'AdjustAC' => $AdjustAC,
-                        'ACInstructions' => $row[124],
-                        'AdjustLights' => $AdjustLights,
-                        'LightsInstructions' => $row[126],
-                        'AdjustCurtains' => $AdjustCurtains,
-                        'CurtainInstructions' => $row[128],
-                        'OtherInstructions' => $OtherInstructions,
-                        'OtherHouseSitInstructions' => $row[130],
-                        'DocsClientReg' => $row[131],
-                        'DocsDaycareTaCs' => $row[132],
-                        'DocsOffleadTaCs' => $row[133],
-                        'DocsWalksTaCs' => $row[134],
-                        'DocsBoardingTaCs' => $row[135],
-                        'DocsGroomingTaCs' => $row[136],
-                        'DocsOLDTaCs' => $row[137],
-                        'DocsClientCareTaCs' => $row[138],
-                        'DocsDogAssessTaCs' => $row[139],
-                        'DocsOtherNameTaCs' => $row[140],
-                        'DocsOtherTaCs' => $row[141],
-                        'PrefPaymentMethod' => $row[142],
-                        'ChargeCardOnFile' => $ChargeCardOnFile,
-                        'BillingNotes' => $row[144],
-                        'BillingType' => $row[145],
-
-                    ]);
-                } catch (\Exception $e) {
-                    Log::error("Error inserting client data: {$e->getMessage()}", ['row' => $row]);
-                    // Optionally, add error handling or logging here
-                }
+                $uniqueHeaders[] = $newHeader;
             }
 
-            fclose($handle);
-            return back()->with('success', 'File has been uploaded successfully!');
-        } else {
-            return back()->with('error', 'Could not open the uploaded file.');
+            // Skipping the actual header row in further processing
+            $records = (new Statement())->offset(1)->process($csv);
+
+
+            DB::table('clients')->truncate(); // Truncate (i.e remove everything from) the clients table
+
+
+            foreach ($records as $row) {
+                if(count($row) !== count($uniqueHeaders)){
+                    // Log warning if row and headers count do not match
+                    Log::warning("CSV row and headers count mismatch", ['row' => $row]);
+                    continue; // Skip to next record
+                }
+
+                $record = array_combine($uniqueHeaders, $row);
+                // Adjust boolean fields as necessary
+                $record['AltCCEmail'] = filter_var($record['AltCCEmail'], FILTER_VALIDATE_BOOLEAN);
+                $record['AltKeyHolder'] = filter_var($record['AltKeyHolder'], FILTER_VALIDATE_BOOLEAN);
+                $record['Alarmed'] = filter_var($record['Alarmed'], FILTER_VALIDATE_BOOLEAN);
+                $record['KDWhasKey'] = filter_var($record['KDWhasKey'], FILTER_VALIDATE_BOOLEAN);
+                $record['Emg1CCEmail'] = filter_var($record['Emg1CCEmail'], FILTER_VALIDATE_BOOLEAN);
+                $record['Emg1KeyHolder'] = filter_var($record['Emg1KeyHolder'], FILTER_VALIDATE_BOOLEAN);
+                $record['Emg2KeyHolder'] = filter_var($record['Emg2KeyHolder'], FILTER_VALIDATE_BOOLEAN);
+                $record['Emg3KeyHolder'] = filter_var($record['Emg3KeyHolder'], FILTER_VALIDATE_BOOLEAN);
+                $record['RequirePickDrop'] = filter_var($record['RequirePickDrop'], FILTER_VALIDATE_BOOLEAN);
+                $record['BringInMail'] = filter_var($record['BringInMail'], FILTER_VALIDATE_BOOLEAN);
+                $record['BringInNewspaper'] = filter_var($record['BringInNewspaper'], FILTER_VALIDATE_BOOLEAN);
+                $record['TakeOutRubbish'] = filter_var($record['TakeOutRubbish'], FILTER_VALIDATE_BOOLEAN);
+                $record['WaterIndoorPlants'] = filter_var($record['WaterIndoorPlants'], FILTER_VALIDATE_BOOLEAN);
+                $record['WaterOutdoorPlants'] = filter_var($record['WaterOutdoorPlants'], FILTER_VALIDATE_BOOLEAN);
+                $record['AdjustAC'] = filter_var($record['AdjustAC'], FILTER_VALIDATE_BOOLEAN);
+                $record['AdjustLights'] = filter_var($record['AdjustLights'], FILTER_VALIDATE_BOOLEAN);
+                $record['AdjustCurtains'] = filter_var($record['AdjustCurtains'], FILTER_VALIDATE_BOOLEAN);
+                $record['OtherInstructions'] = filter_var($record['OtherInstructions'], FILTER_VALIDATE_BOOLEAN);
+                $record['ChargeCardOnFile'] = filter_var($record['ChargeCardOnFile'], FILTER_VALIDATE_BOOLEAN);
+                // Continue adjusting and handling other fields similarly
+
+                Client::create([
+                    'ClientID' => $record['ClientID'],
+                    'AccountID' => $record['AccountID'],
+                    'Status' => $record['Status'],
+                    'InvoiceType' => $record['InvoiceType'],
+                    'PrimaryStaffID' => $record['PrimaryStaffID'],
+                    'StaffFirstName' => $record['StaffFirstName'],
+                    'StaffLastName' => $record['StaffLastName'],
+                    'TeamID' => $record['TeamID'],
+                    'TeamMembers' => $record['TeamMembers'],
+                    'Area' => $record['Area'],
+                    'Type' => $record['Type'],
+                    'DiaryRef' => $record['DiaryRef'],
+                    'FirstName' => $record['FirstName'],
+                    'LastName' => $record['LastName'],
+                    'Email' => $record['Email'],
+                    'HomePhone' => $record['HomePhone'],
+                    'WorkPhone' => $record['WorkPhone'],
+                    'MobilePhone' => $record['MobilePhone'],
+                    'Address1' => $record['Address1'],
+                    'Address2' => $record['Address2'],
+                    'Address3' => $record['Address3'],
+                    'AddressTown' => $record['AddressTown'],
+                    'AddressState' => $record['AddressState'],
+                    'AddressZip' => $record['AddressZip'],
+                    'Run' => $record['Run'],
+                    'AltFirstName' => $record['AltFirstName'],
+                    'AltLastName' => $record['AltLastName'],
+                    'AltRelationship' => $record['AltRelationship'],
+                    'AltEmail' => $record['AltEmail'],
+                    'AltHomePhone' => $record['AltHomePhone'],
+                    'AltWorkPhone' => $record['AltWorkPhone'],
+                    'AltMobilePhone' => $record['AltMobilePhone'],
+                    'AltAddress1' => $record['AltAddress1'],
+                    'AltAddress2' => $record['AltAddress2'],
+                    'AltAddress3' => $record['AltAddress3'],
+                    'AltAddressTown' => $record['AltAddressTown'],
+                    'AltAddressState' => $record['AltAddressState'],
+                    'AltAddressZip' => $record['AltAddressZip'],
+                    'AccessDoorImage' => $record['AccessDoorImage'],
+                    'LockBoxCodeAndLocation' => $record['LockBoxCodeAndLocation'],
+                    'LockBoxImage' => $record['LockBoxImage'],
+                    'AlarmInstructions' => $record['AlarmInstructions'],
+                    'AlarmImage' => $record['AlarmImage'],
+                    'ParkingSpaceImage' => $record['ParkingSpaceImage'],
+                    'BuildingAccessInstructions' => $record['BuildingAccessInstructions'],
+                    'AccessKey' => $record['AccessKey'],
+                    'WalkInfoPhoto' => $record['WalkInfoPhoto'],
+                    'WalkInfoKeySafeInstructions' => $record['WalkInfoKeySafeInstructions'],
+                    'WalkInfoDogLeft' => $record['WalkInfoDogLeft'],
+                    'WalkInfoWalkingInfo' => $record['WalkInfoWalkingInfo'],
+                    'WalkInfoFeedingInfo' => $record['WalkInfoFeedingInfo'],
+                    'WalkInfoWalkWithOthers' => $record['WalkInfoWalkWithOthers'],
+                    'WalkInfoHarnessPhoto' => $record['WalkInfoHarnessPhoto'],
+                    'WalkInfoImportantInfo' => $record['WalkInfoImportantInfo'],
+                    'What3Words' => $record['What3Words'],
+                    'WalkInfoExtraPhoto1' => $record['WalkInfoExtraPhoto1'],
+                    'WalkInfoExtraPhoto2' => $record['WalkInfoExtraPhoto2'],
+                    'AdminNotes' => $record['AdminNotes'],
+                    'StaffNotes' => $record['StaffNotes'],
+                    'Emg1FirstName' => $record['Emg1FirstName'],
+                    'Emg1LastName' => $record['Emg1LastName'],
+                    'Emg1Relationship' => $record['Emg1Relationship'],
+                    'Emg1Email' => $record['Emg1Email'],
+                    'Emg1HomePhone' => $record['Emg1HomePhone'],
+                    'Emg1WorkPhone' => $record['Emg1WorkPhone'],
+                    'Emg1MobilePhone' => $record['Emg1MobilePhone'],
+                    'Emg1Address1' => $record['Emg1Address1'],
+                    'Emg1Address2' => $record['Emg1Address2'],
+                    'Emg1Address3' => $record['Emg1Address3'],
+                    'Emg1AddressTown' => $record['Emg1AddressTown'],
+                    'Emg1AddressState' => $record['Emg1AddressState'],
+                    'Emg1AddressZip' => $record['Emg1AddressZip'],
+                    'Emg1Notes' => $record['Emg1Notes'],
+                    'Emg2FirstName' => $record['Emg2FirstName'],
+                    'Emg2LastName' => $record['Emg2LastName'],
+                    'Emg2Relationship' => $record['Emg2Relationship'],
+                    'Emg2Email' => $record['Emg2Email'],
+                    'Emg2HomePhone' => $record['Emg2HomePhone'],
+                    'Emg2WorkPhone' => $record['Emg2WorkPhone'],
+                    'Emg2MobilePhone' => $record['Emg2MobilePhone'],
+                    'Emg2Address1' => $record['Emg2Address1'],
+                    'Emg2Address2' => $record['Emg2Address2'],
+                    'Emg2Address3' => $record['Emg2Address3'],
+                    'Emg2AddressTown' => $record['Emg2AddressTown'],
+                    'Emg2AddressState' => $record['Emg2AddressState'],
+                    'Emg2AddressZip' => $record['Emg2AddressZip'],
+                    'Emg2Notes' => $record['Emg2Notes'],
+                    'Emg3FirstName' => $record['Emg3FirstName'],
+                    'Emg3LastName' => $record['Emg3LastName'],
+                    'Emg3Relationship' => $record['Emg3Relationship'],
+                    'Emg3Email' => $record['Emg3Email'],
+                    'Emg3HomePhone' => $record['Emg3HomePhone'],
+                    'Emg3WorkPhone' => $record['Emg3WorkPhone'],
+                    'Emg3MobilePhone' => $record['Emg3MobilePhone'],
+                    'Emg3Address1' => $record['Emg3Address1'],
+                    'Emg3Address2' => $record['Emg3Address2'],
+                    'Emg3Address3' => $record['Emg3Address3'],
+                    'Emg3AddressTown' => $record['Emg3AddressTown'],
+                    'Emg3AddressState' => $record['Emg3AddressState'],
+                    'Emg3AddressZip' => $record['Emg3AddressZip'],
+                    'Emg3Notes' => $record['Emg3Notes'],
+                    'PickupInstructions' => $record['PickupInstructions'],
+                    'DropOffInstructions' => $record['DropOffInstructions'],
+                    'WetInstructions' => $record['WetInstructions'],
+                    'MailInstructions' => $record['MailInstructions'],
+                    'NewspaperInstructions' => $record['NewspaperInstructions'],
+                    'RubbishInstructions' => $record['RubbishInstructions'],
+                    'IndoorPlantInstructions' => $record['IndoorPlantInstructions'],
+                    'OutdoorPlantInstructions' => $record['OutdoorPlantInstructions'],
+                    'ACInstructions' => $record['ACInstructions'],
+                    'LightsInstructions' => $record['LightsInstructions'],
+                    'CurtainInstructions' => $record['CurtainInstructions'],
+                    'OtherHouseSitInstructions' => $record['OtherHouseSitInstructions'],
+                    'DocsClientReg' => $record['DocsClientReg'],
+                    'DocsDaycareTaCs' => $record['DocsDaycareTaCs'],
+                    'DocsOffleadTaCs' => $record['DocsOffleadTaCs'],
+                    'DocsWalksTaCs' => $record['DocsWalksTaCs'],
+                    'DocsBoardingTaCs' => $record['DocsBoardingTaCs'],
+                    'DocsGroomingTaCs' => $record['DocsGroomingTaCs'],
+                    'DocsOLDTaCs' => $record['DocsOLDTaCs'],
+                    'DocsClientCareTaCs' => $record['DocsClientCareTaCs'],
+                    'DocsDogAssessTaCs' => $record['DocsDogAssessTaCs'],
+                    'DocsOtherNameTaCs' => $record['DocsOtherNameTaCs'],
+                    'DocsOtherTaCs' => $record['DocsOtherTaCs'],
+                    'PrefPaymentMethod' => $record['PrefPaymentMethod'],
+                    'BillingNotes' => $record['BillingNotes'],
+                    'BillingType' => $record['BillingType'],
+                    // Map other fields from $record as necessary
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error("Error processing CSV import: {$e->getMessage()}");
+            return back()->with('error', 'There was an issue processing your CSV file.');
         }
+
+        return back()->with('success', 'File has been uploaded successfully!');
+
     }
 
 
