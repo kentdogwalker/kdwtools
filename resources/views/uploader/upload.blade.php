@@ -87,7 +87,7 @@
                 <!-- VET DATA UPLOAD CARD -->
                 <div class="col-lg-4">
                     <div class="card h-100">
-                        <form action="{{ route('vets.upload') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('upload.vets') }}" method="POST" enctype="multipart/form-data">
                             @csrf {{-- CSRF token for security --}}
                         <div class="card-header pb-0 p-3">
                             <div class="row">
@@ -101,8 +101,8 @@
                         </div>
                         <div class="card-body p-3 pb-0">
                             <div class="mb-3">
-                                <label class="form-label" for="vets_file">Select Vet CSV file to upload:</label>
-                                <input type="file" class="form-control form-control-sm border border-2 p-2" name="vets_file" id="vets_file" required>
+                                <label class="form-label" for="vets_csv">Select Vet CSV file to upload:</label>
+                                <input type="file" class="form-control form-control-sm border border-2 p-2" name="vets_csv" id="vets_csv" required>
                             </div>
                         </div>
                         </form>

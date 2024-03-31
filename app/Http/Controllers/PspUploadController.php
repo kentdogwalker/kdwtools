@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\Client;
 use App\Models\Pet;
+use App\Models\Vet;
 use League\Csv\Reader;
 use League\Csv\Statement;
 
@@ -413,4 +414,55 @@ class PspUploadController extends Controller
         return back()->with('error', 'Could not open the uploaded file.');
     }
 }
+
+
+
+
+public function uploadVets(Request $request)
+{
+    $file = $request->file('vets_csv')->getRealPath(); // Get the real path to the file
+
+    try {
+        // Open and read the CSV
+        if (($handle = fopen($file, 'r')) !== false) {
+            // Skip the header row
+            fgetcsv($handle);
+
+            while (($row = fgetcsv($handle, 0, ",", '"')) !== false) { // Ensuring encapsulation handling
+                // Sanitize each field in the row to remove line breaks
+                $sanitizedRow = array_map(function ($field) {
+                    return str_replace(["\r\n", "\n", "\r"], ' ', $field);
+                }, $row);
+
+                // Process the sanitized row
+                Vet::updateOrCreate(['VetID' => $sanitizedRow[0]], [
+                    'Practice_Name' => $sanitizedRow[1] ?? null,
+                    'Veterinarian_Name' => $sanitizedRow[2] ?? null,
+                    'Address_line1' => $sanitizedRow[3] ?? null,
+                    'Address_line2' => $sanitizedRow[4] ?? null,
+                    'Address_line3' => $sanitizedRow[5] ?? null,
+                    'Address_town' => $sanitizedRow[6] ?? null,
+                    'Address_state' => $sanitizedRow[7] ?? null,
+                    'Address_zip' => $sanitizedRow[8] ?? null,
+                    'Phone' => $sanitizedRow[9] ?? null,
+                ]);
+            }
+
+            fclose($handle);
+        }
+    } catch (\Exception $e) {
+        // Log any exceptions to the Laravel log file
+        Log::error('Error importing vets CSV: ' . $e->getMessage());
+
+        // Optionally, return an error response or redirect back with an error message
+        return back()->with('error', 'An error occurred while importing the CSV. Please check the Laravel log for details.');
+    }
+
+    return back()->with('success', 'Vets imported successfully.');
+}
+
+
+
+
+
 }

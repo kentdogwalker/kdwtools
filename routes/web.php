@@ -76,6 +76,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/upload-pets', [PspUploadController::class, 'uploadPets'])->name('pets.upload');
 
-    Route::post('/upload-vets', [PspUploadController::class, 'uploadVets'])->name('vets.upload');
+    Route::post('/upload-vets', [PspUploadController::class, 'uploadVets'])->name('upload.vets');
+
 
 });

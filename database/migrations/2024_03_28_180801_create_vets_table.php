@@ -12,7 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('vets', function (Blueprint $table) {
-            $table->id();
+            $table->id('VetID');
+            $table->string('Practice_Name')->nullable();
+            $table->string('Veterinarian_Name')->nullable();
+            $table->string('Address_line1')->nullable();
+            $table->string('Address_line2')->nullable();
+            $table->string('Address_line3')->nullable();
+            $table->string('Address_town')->nullable();
+            $table->string('Address_state')->nullable();
+            $table->string('Address_zip')->nullable();
+            $table->string('Phone')->nullable();
             $table->timestamps();
         });
     }

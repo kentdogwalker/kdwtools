@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Vet extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'VetID', 'Practice_Name', 'Veterinarian_Name', 'Address_line1', 'Address_line2', 'Address_line3',
+        'Address_town', 'Address_state', 'Address_zip', 'Phone'
+    ];
 }
