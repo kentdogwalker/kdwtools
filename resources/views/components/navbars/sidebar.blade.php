@@ -16,32 +16,6 @@
     <div class="collapse navbar-collapse  w-auto  max-height-vh-100" id="sidenav-collapse-main">
         <ul class="navbar-nav">
 
-            <li class="nav-item mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Quick Links</h6>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link text-white"
-                    href="https://0508kentdogwalkergroup.petsoftware.net/" target="_blank">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i style="font-size: 1.2rem;" class="fas fa-paw ps-2 pe-2 text-center"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Pet Sitter Plus</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link text-white"
-                    href="https://manage.gocardless.com/" target="_blank">
-
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i style="font-size: 1rem;" class="fas fa-credit-card ps-2 pe-2 text-center"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">GoCardless</span>
-                </a>
-            </li>
-
-
             <!-- DASHBOARD SECTION -->
             <li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Dashboards</h6>
@@ -180,21 +154,34 @@
 
 
     <div class="sidenav-footer position-absolute w-100 bottom-0 align-items-center">
-        <div class="mx-3 align-items-center">
-            <img src="{{ asset('assets') }}/img/kdwlong-coloured.png" class="align-items-center" style="width:210px;height:40px" alt="kdw_logo">
+        <div class="mx-3">
+            <a class="btn btn-primary w-100"
+                href="{{ route('psp.upload.form') }}" type="button">
+                <i style="font-size: 1rem;" class="material-icons opacity-10 ps-0 pe-2 text-center">cloud_upload</i>
+                <span class="ms-1">Upload PSP Data</span>
+            </a>
+        </div>
+
+        <div class="mx-3">
+            <a class="btn btn-outline-primary w-100"
+                href="https://0508kentdogwalkergroup.petsoftware.net/" target="_blank" type="button" style="color: #5AB7B7; border-color: #5AB7B7;">
+                <i style="font-size: 1rem;" class="fas fa-paw ps-0 pe-2 text-center"></i>
+                <span class="ms-1">Pet Sitter Plus</span>
+            </a>
+        </div>
+
+        <div class="mx-3">
+            <a class="btn btn-outline-primary w-100"
+            href="https://manage.gocardless.com/" target="_blank" type="button" style="color: #f1f252; border-color: #f1f252;">
+            <i style="font-size: 1rem;" class="fas fa-credit-card ps-0 pe-2 text-center"></i>
+            <span class="ms-1">GoCardless</span>
+            </a>
         </div>
 
 
-        <div class="mx-3">
-            <a class="btn bg-gradient-primary w-100" href="../../documentation/getting-started/installation.html" target="_blank">View documentation</a>
-        </div>
-        <div class="mx-3">
-            <a class="btn bg-gradient-primary w-100"
-                href="https://www.creative-tim.com/product/material-dashboard-pro-laravel" target="_blank" type="button">Upgrade
-                to pro</a>
-        </div>
 
     </div>
 
 
 </aside>
+
