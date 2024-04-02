@@ -70,6 +70,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('user-profile', function () {
 		return view('pages.laravel-examples.user-profile');
 	})->name('user-profile');
+    Route::get('hotel.unassignedbookings', function () {
+		return view('hotel.unassignedbookings');
+	})->name('hotel-unassignedbookings');
 
     Route::get('/upload', [PspUploadController::class, 'showForm'])->name('psp.upload.form');
     Route::post('/upload', [PspUploadController::class, 'upload'])->name('psp.upload');
