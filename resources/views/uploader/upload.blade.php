@@ -110,6 +110,31 @@
                 </div>
 
 
+                <div class="row mt-3">
+                    <!-- SERVICE DATA UPLOAD CARD -->
+                    <div class="col-lg-4">
+                        <div class="card h-100">
+                            <form action="" method="POST" enctype="multipart/form-data">
+                                @csrf {{-- CSRF token for security --}}
+                            <div class="card-header pb-0 p-3">
+                                <div class="row">
+                                    <div class="col-6 d-flex align-items-center">
+                                        <h6 class="mb-0">Service Data</h6>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <button type="submit" class="btn btn-outline-primary btn-sm mb-0">Upload</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body p-3 pb-0">
+                                <div class="mb-3">
+                                    <label class="form-label" for="file">Select Services CSV file to upload:</label>
+                                    <input type="file" class="form-control form-control-sm border border-2 p-2" name="csv_file" id="file" required>
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
 
 
             </div>

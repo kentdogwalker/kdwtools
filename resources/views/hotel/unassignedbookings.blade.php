@@ -30,6 +30,12 @@
                                             <th
                                                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                                 Client</th>
+                                             <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Select Dog</th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Dog Name</th>
                                             <th
                                                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                 Stay Start/End</th>
@@ -46,26 +52,31 @@
                                         <tr>
 
                                             <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <div>
-                                                        <img src="{{ asset('assets') }}/img/dogs/arrow.jpg"
-                                                            class="avatar avatar-sm me-3 border-radius-lg"
-                                                            alt="user1">
-                                                    </div>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm">Arrow</h6>
-                                                        <p class="text-xs text-secondary mb-0">Alaskan Malamute
-                                                        </p>
-                                                    </div>
+                                                <div class="align-middle px-3" >
+                                                        <h6 class="mb-0 text-sm">Arrow & Leo</h6>
                                                 </div>
                                             </td>
 
                                             <td>
                                                 <div class="d-flex flex-column justify-content-center">
                                                     <p class="text-xs font-weight-bold mb-0">Jamie Tikaani</p>
-                                                    <p class="text-xs text-secondary mb-0">07393549921 jamie@kentdogwalker.co.uk</p>
+                                                    <p class="text-xs text-secondary mb-0">07393549921</p>
                                                 </div>
                                             </td>
+
+                                            <td class="align-middle">
+                                                <select class="form-select form-select-sm" aria-label=".form-select-sm example">
+                                                    <option selected>Select Dog</option>
+                                                    <option value="1">Arrow (Alaskan Malamute)</option>
+                                                    <option value="2">Leo (Border Tierrier)</option>
+                                                  </select>
+                                            </td>
+
+                                            <td class="align-middle text-sm">
+                                                <input type="text" class="form-control form-control-sm border" id="DogName" placeholder="Select a dog first">
+                                            </td>
+
+
 
                                             <td class="align-middle text-center text-sm">
                                                 <div class="d-flex flex-column justify-content-center">
@@ -121,6 +132,7 @@
                                             <th
                                                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                                 Client</th>
+
                                             <th
                                                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                 Stay Start/End</th>
@@ -154,9 +166,11 @@
                                             <td>
                                                 <div class="d-flex flex-column justify-content-center">
                                                     <p class="text-xs font-weight-bold mb-0">Jamie Tikaani</p>
-                                                    <p class="text-xs text-secondary mb-0">07393549921 jamie@kentdogwalker.co.uk</p>
+                                                    <p class="text-xs text-secondary mb-0">07393549921</p>
                                                 </div>
                                             </td>
+
+
 
                                             <td class="align-middle text-center text-sm">
                                                 <div class="d-flex flex-column justify-content-center">
