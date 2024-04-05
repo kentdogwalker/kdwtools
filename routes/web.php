@@ -22,6 +22,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\PspUploadController;
+use App\Http\Controllers\PublicHotelRoomController;
 
 
 Route::get('/', function () {return redirect('sign-in');})->middleware('guest');
@@ -39,9 +40,21 @@ Route::get('/reset-password/{token}', function ($token) {
 	return view('sessions.password.reset', ['token' => $token]);
 })->middleware('guest')->name('password.reset');
 
+
+// Route for displaying public hotel room information
+Route::get('/rooms/{roomID}', [PublicHotelRoomController::class, 'show'])->name('rooms.show');
+
+
+
 Route::post('sign-out', [SessionsController::class, 'destroy'])->middleware('auth')->name('logout');
 Route::get('profile', [ProfileController::class, 'create'])->middleware('auth')->name('profile');
 Route::post('user-profile', [ProfileController::class, 'update'])->middleware('auth');
+
+
+
+
+
+
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('billing', function () {
 		return view('pages.billing');
