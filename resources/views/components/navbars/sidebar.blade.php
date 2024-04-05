@@ -32,12 +32,12 @@
             </li>
 
 
-            <!-- UPLOADER SECTION -->
+            <!-- UPLOADER SECTION
             <li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Uploader</h6>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item mt-0">
                 <a class="nav-link text-white {{ $activePage == 'upload' ? ' active bg-gradient-primary' : '' }} "
                     href="{{ route('psp.upload.form') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -46,14 +46,15 @@
                     <span class="nav-link-text ms-1">PSP Data Uploader</span>
                 </a>
             </li>
+            -->
 
 
-            <!-- BOOKINGS SECTION -->
+            <!-- BILLING SECTION -->
             <li class="nav-item mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Bookings</h6>
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Billing</h6>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item mt-0">
                 <a class="nav-link text-white {{ $activePage == 'billing' ? ' active bg-gradient-primary' : '' }}  "
                     href="{{ route('billing') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -69,7 +70,7 @@
                 <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Daily Sheets</h6>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item mt-0">
                 <a class="nav-link text-white {{ $activePage == 'virtual-reality' ? ' active bg-gradient-primary' : '' }}  "
                     href="{{ route('virtual-reality') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -79,7 +80,7 @@
                 </a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item mt-0">
                 <a class="nav-link text-white {{ $activePage == 'rtl' ? ' active bg-gradient-primary' : '' }}  "
                     href="{{ route('rtl') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -96,7 +97,7 @@
             </li>
 
 
-            <li class="nav-item">
+            <li class="nav-item mt-0">
                 <a class="nav-link text-white {{ $activePage == 'unassignedbookings' ? ' active bg-gradient-primary' : '' }}  "
                     href="{{ route('hotel-unassignedbookings') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -106,7 +107,7 @@
                 </a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item mt-0">
                 <a class="nav-link text-white {{ $activePage == 'notifications' ? ' active bg-gradient-primary' : '' }}  "
                     href="{{ route('notifications') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -122,7 +123,65 @@
                 <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">IT Management</h6>
             </li>
 
+            <li class="nav-item mt-0">
+                <a class="nav-link text-white"
+                    href="">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">videocam</i>
+                    </div>
+                    <span class="nav-link-text ms-1">View CCTV</span>
+                </a>
+            </li>
+
+            <!-- Server Management - Collapsible Trigger -->
             <li class="nav-item">
+                <a class="nav-link text-white collapsed" href="#serverManagementCollapse" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="serverManagementCollapse">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">dvr</i>
+                    </div>
+                    <span class="nav-link-text ms-1">Server Management</span>
+                </a>
+            </li>
+
+            <!-- Collapsible Content for Server Management -->
+            <div class="collapse" id="serverManagementCollapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item mt-0">
+                        <a class="nav-link text-white " href="">
+                            <div class="text-white text-center ms-2 me-2 d-flex align-items-center justify-content-center">
+                                <i class="material-icons opacity-10" style="font-size: 16px;">screenshot_monitor</i>
+                            </div>
+                            <span class="nav-link-text ms-1">Citadel (Unraid)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mt-0">
+                        <a class="nav-link text-white " href="">
+                            <div class="text-white text-center ms-2 me-2 d-flex align-items-center justify-content-center">
+                                <i class="material-icons opacity-10" style="font-size: 16px;">screenshot_monitor</i>
+                            </div>
+                            <span class="nav-link-text ms-1">The Ark (Unraid)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mt-0">
+                        <a class="nav-link text-white " href="">
+                            <div class="text-white text-center ms-2 me-2 d-flex align-items-center justify-content-center">
+                                <i class="material-icons opacity-10" style="font-size: 16px;">screenshot_monitor</i>
+                            </div>
+                            <span class="nav-link-text ms-1">Webserver (Citadel-VM)</span>
+                        </a>
+                    </li>
+                    <!-- Add more links as needed -->
+                </ul>
+            </div>
+
+
+
+            <!-- USER PROFILE SECTION -->
+            <li class="nav-item mt-3">
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">User</h6>
+            </li>
+
+            <li class="nav-item mt-0">
                 <a class="nav-link text-white {{ $activePage == 'profile' ? ' active bg-gradient-primary' : '' }}  "
                     href="{{ route('profile') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -132,23 +191,6 @@
                 </a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link text-white " href="{{ route('static-sign-in') }}">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">login</i>
-                    </div>
-                    <span class="nav-link-text ms-1">Sign In</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link text-white " href="{{ route('static-sign-up') }}">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">assignment</i>
-                    </div>
-                    <span class="nav-link-text ms-1">Sign Up</span>
-                </a>
-            </li>
         </ul>
     </div>
 
