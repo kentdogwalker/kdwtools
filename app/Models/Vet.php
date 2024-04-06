@@ -13,4 +13,11 @@ class Vet extends Model
         'VetID', 'Practice_Name', 'Veterinarian_Name', 'Address_line1', 'Address_line2', 'Address_line3',
         'Address_town', 'Address_state', 'Address_zip', 'Phone'
     ];
+
+    protected $primaryKey = 'VetID';
+
+    public function pets()
+    {
+        return $this->hasMany(Pet::class, 'PetID');
+    }
 }

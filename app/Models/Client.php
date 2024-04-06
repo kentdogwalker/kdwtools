@@ -160,7 +160,15 @@ class Client extends Model
         // Add all other column names you wish to be mass-assignable
     ];
 
+    protected $primaryKey = 'ClientID';
 
+    public function pets()
+    {
+        return $this->hasMany(Pet::class, 'PetID');
+    }
 
-
+    public function services()
+    {
+        return $this->hasMany(Service::class, 'id');
+    }
 }

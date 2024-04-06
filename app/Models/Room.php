@@ -12,4 +12,11 @@ class Room extends Model
     protected $fillable = [
         'RoomID', 'RoomName'
     ];
+
+    protected $primaryKey = 'RoomID';
+
+    public function hotelbookings()
+    {
+        return $this->hasMany(Hotelbookings::class, 'HotelBookingID');
+    }
 }

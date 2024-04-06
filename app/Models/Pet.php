@@ -10,7 +10,7 @@ class Pet extends Model
     use HasFactory;
 
     protected $fillable = [
-        'PetID',
+        // 'PetID',
         'ClientID',
         'AccountID',
         'VetID',
@@ -144,6 +144,22 @@ class Pet extends Model
         'GroomingPriceCharged',
         'GroomingTandCs',
         'XLBullyExemption',
-
     ];
+
+    protected $primaryKey = 'PetID';
+
+    public function clients()
+    {
+        return $this->belongsTo(Client::class, 'ClientID');
+    }
+
+    public function vets()
+    {
+        return $this->belongsTo(Vet::class, 'VetID');
+    }
+
+    public function hotelbookings()
+    {
+        return $this->hasMany(Hotelbookings::class, 'HotelBookingID');
+    }
 }
