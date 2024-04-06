@@ -37,6 +37,22 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets') }}/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
+
+    <style>
+        .underline-custom::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; /* Adjust the distance to the text */
+            left: 0;
+            width: 100%;
+            border-bottom: 1px solid #FFF; /* Adjust the thickness and color of the line */
+        }
+        .underline-custom {
+            display: inline-block;
+            position: relative;
+            border-bottom: 1px solid transparent; /* Prevents text descenders from being clipped */
+        }
+    </style>
 </head>
 
 <body class="{{ $bodyClass }}">
