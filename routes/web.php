@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+	return view('welcome');
 });
 
 use App\Http\Controllers\DashboardController;
@@ -25,7 +25,9 @@ use App\Http\Controllers\PspUploadController;
 use App\Http\Controllers\PublicHotelRoomController;
 
 
-Route::get('/', function () {return redirect('sign-in');})->middleware('guest');
+Route::get('/', function () {
+	return redirect('sign-in');
+})->middleware('guest');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
 Route::get('sign-up', [RegisterController::class, 'create'])->middleware('guest')->name('register');
 Route::post('sign-up', [RegisterController::class, 'store'])->middleware('guest');
@@ -83,16 +85,15 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('user-profile', function () {
 		return view('pages.laravel-examples.user-profile');
 	})->name('user-profile');
-    Route::get('hotel.unassignedbookings', function () {
+	Route::get('hotel.unassignedbookings', function () {
 		return view('hotel.unassignedbookings');
 	})->name('hotel-unassignedbookings');
 
-    Route::get('/upload', [PspUploadController::class, 'showForm'])->name('psp.upload.form');
-    Route::post('/upload', [PspUploadController::class, 'upload'])->name('psp.upload');
+	Route::get('/upload', [PspUploadController::class, 'showForm'])->name('psp.upload.form');
+	Route::post('/upload', [PspUploadController::class, 'upload'])->name('psp.upload');
 
-    Route::post('/upload-pets', [PspUploadController::class, 'uploadPets'])->name('pets.upload');
+	Route::post('/upload-pets', [PspUploadController::class, 'uploadPets'])->name('pets.upload');
 
-    Route::post('/upload-vets', [PspUploadController::class, 'uploadVets'])->name('upload.vets');
-
-
+	Route::post('/upload-vets', [PspUploadController::class, 'uploadVets'])->name('upload.vets');
+	Route::post('/upload-services', [PspUploadController::class, 'uploadServices'])->name('upload.services');
 });
