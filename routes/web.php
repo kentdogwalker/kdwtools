@@ -18,6 +18,7 @@ Route::get('/', function () {
 });
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HotelbookingsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SessionsController;
@@ -85,9 +86,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('user-profile', function () {
 		return view('pages.laravel-examples.user-profile');
 	})->name('user-profile');
-	Route::get('hotel.unassignedbookings', function () {
-		return view('hotel.unassignedbookings');
-	})->name('hotel-unassignedbookings');
+	Route::get('hotel.unassignedbookings', [HotelbookingsController::class, 'index'])->name('hotel-unassignedbookings');
+	Route::patch('hotel.unassignedbookings/assign/{id}', [HotelbookingsController::class, 'assign'])->name('hotel-unassignedbookings.assign');
 
 	Route::get('/upload', [PspUploadController::class, 'showForm'])->name('psp.upload.form');
 	Route::post('/upload', [PspUploadController::class, 'upload'])->name('psp.upload');

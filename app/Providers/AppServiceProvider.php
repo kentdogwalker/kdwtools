@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use Doctrine\DBAL\Types\Type;
+// use Doctrine\DBAL\Types\Type;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,9 +20,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Register ENUM type if it's not already registered
-        if (!Type::hasType('enum')) {
-            Type::addType('enum', 'Doctrine\DBAL\Types\StringType');
-        }
+        // // Register ENUM type if it's not already registered
+        // if (!Type::hasType('enum')) {
+        //     Type::addType('enum', 'Doctrine\DBAL\Types\StringType');
+        // }
     }
 }
