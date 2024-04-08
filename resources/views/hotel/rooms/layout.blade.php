@@ -15,7 +15,7 @@
 <body class="full-screen-big" style="background-color: black; color: white; margin: 0; height: 100vh; display: flex; align-items: top; justify-content: center;">
 
     <div class="full-screen-container" style="width: 100%; max-width: 100%; padding: 40px;">
-        @yield('content')
+        @yield('vacant')
     </div>
 
 
