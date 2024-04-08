@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UploadClientsRequest;
+use App\Http\Requests\UploadServicesRequest;
 use App\Models\Client;
 use App\Models\Vet;
 use Illuminate\Http\Request;
@@ -9,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use App\Services\ClientService;
 use App\Services\CsvToArray;
 use App\Services\PetService;
+use App\Services\ServiceService;
 use App\Services\VetService;
 
 class PspUploadController extends Controller
@@ -16,12 +19,16 @@ class PspUploadController extends Controller
     protected $clientService;
     protected $petService;
     protected $vetService;
+    protected $csvService;
+    protected $servicesService;
 
     public function __construct()
     {
         $this->clientService = new ClientService;
         $this->petService = new PetService;
         $this->vetService = new VetService;
+        $this->csvService = new CsvToArray;
+        $this->servicesService = new ServiceService;
     }
 
     public function showForm()
@@ -29,15 +36,10 @@ class PspUploadController extends Controller
         return view('uploader.upload'); // Make sure this view path is correct
     }
 
-    public function upload(Request $request)
+    public function upload(UploadClientsRequest $request)
     {
-        $request->validate([
-            'csv_file' => 'required|file|mimes:csv,txt|max:2048',
-        ]);
-
-        $csvFile = $request->file('csv_file')->getRealPath();
-        $csvService = new CsvToArray;
-        $records = $csvService->csvToArray($csvFile);
+        $csvFile = $request->file('clients_file')->getRealPath();
+        $records = $this->csvService->csvToArray($csvFile);
         try {
             // DB::table('clients')->truncate(); // Truncate (i.e remove everything from) the clients table
             foreach ($records as $record) {
@@ -124,6 +126,40 @@ class PspUploadController extends Controller
             return back();
         }
         alert()->success('Success', 'Vets imported successfully.');
+        return back();
+    }
+
+    public function uploadServices(UploadServicesRequest $request)
+    {
+        $csvFile = $request->file('csv_file')->getRealPath();
+        $csv = $this->csvService->csvToArray($csvFile);
+
+        $dataCsv = $this->servicesService->getHotelStayAndOtherData($csv);
+        $hotelStay = $dataCsv['hotelStay'];
+        $otherData = $dataCsv['otherData'];
+
+        $newHotelStay = $this->servicesService->getHotelStayFix($hotelStay);
+        // dd($newHotelStay, $otherData);
+        try {
+            foreach ($newHotelStay as $key) {
+                $client = Client::find($key['ClientID']);
+                if ($client) {
+                    $this->servicesService->createToServices($key, 'hotel stays');
+                }
+            }
+
+            foreach ($otherData as $item) {
+                $client = Client::find($item['ClientID']);
+                if ($client) {
+                    $this->servicesService->createToServices($item, 'other');
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error("Error processing CSV import: {$e->getMessage()}");
+            alert()->error('Error', 'There was an issue processing your CSV file.');
+            return back();
+        }
+        alert()->success('Success', 'File has been uploaded successfully!');
         return back();
     }
 }

@@ -39,23 +39,31 @@
                     <div class="card h-100">
                         <form action="{{ route('psp.upload') }}" method="POST" enctype="multipart/form-data">
                             @csrf {{-- CSRF token for security --}}
-                        <div class="card-header pb-0 p-3">
-                            <div class="row">
-                                <div class="col-6 d-flex align-items-center">
-                                    <h6 class="mb-0">Client Data</h6>
-                                </div>
-                                <div class="col-6 text-end">
-                                    <button type="submit" class="btn btn-outline-primary btn-sm mb-0">Upload</button>
+                            <div class="card-header pb-0 p-3">
+                                <div class="row">
+                                    <div class="col-6 d-flex align-items-center">
+                                        <h6 class="mb-0">Client Data</h6>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <button type="submit"
+                                            class="btn btn-outline-primary btn-sm mb-0">Upload</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card-body p-3 pb-0">
-                            <div class="mb-3">
-                                <label class="form-label" for="file">Select Client CSV file to upload:</label>
-                                <input type="file" class="form-control form-control-sm border border-2 p-2" name="csv_file" id="file" required>
+                            <div class="card-body p-3 pb-0">
+                                <div class="mb-3">
+                                    <label class="form-label" for="file">Select Client CSV file to upload:</label>
+                                    <input type="file"
+                                        class="form-control form-control-sm border border-2 p-2 @error('clients_file') is-invalid @enderror"
+                                        name="clients_file" id="file">
+                                    @error('clients_file')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
                     </div>
                 </div>
 
@@ -64,22 +72,24 @@
                     <div class="card h-100">
                         <form action="{{ route('pets.upload') }}" method="POST" enctype="multipart/form-data">
                             @csrf {{-- CSRF token for security --}}
-                        <div class="card-header pb-0 p-3">
-                            <div class="row">
-                                <div class="col-6 d-flex align-items-center">
-                                    <h6 class="mb-0">Pet Data</h6>
-                                </div>
-                                <div class="col-6 text-end">
-                                    <button type="submit" class="btn btn-outline-primary btn-sm mb-0">Upload</button>
+                            <div class="card-header pb-0 p-3">
+                                <div class="row">
+                                    <div class="col-6 d-flex align-items-center">
+                                        <h6 class="mb-0">Pet Data</h6>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <button type="submit"
+                                            class="btn btn-outline-primary btn-sm mb-0">Upload</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card-body p-3 pb-0">
-                            <div class="mb-3">
-                                <label class="form-label" for="pets_file">Select Pet CSV file to upload:</label>
-                                <input type="file" class="form-control form-control-sm border border-2 p-2" name="pets_file" id="pets_file" required>
+                            <div class="card-body p-3 pb-0">
+                                <div class="mb-3">
+                                    <label class="form-label" for="pets_file">Select Pet CSV file to upload:</label>
+                                    <input type="file" class="form-control form-control-sm border border-2 p-2"
+                                        name="pets_file" id="pets_file" required>
+                                </div>
                             </div>
-                        </div>
                         </form>
                     </div>
                 </div>
@@ -89,22 +99,24 @@
                     <div class="card h-100">
                         <form action="{{ route('upload.vets') }}" method="POST" enctype="multipart/form-data">
                             @csrf {{-- CSRF token for security --}}
-                        <div class="card-header pb-0 p-3">
-                            <div class="row">
-                                <div class="col-6 d-flex align-items-center">
-                                    <h6 class="mb-0">Vet Data</h6>
-                                </div>
-                                <div class="col-6 text-end">
-                                    <button type="submit" class="btn btn-outline-primary btn-sm mb-0">Upload</button>
+                            <div class="card-header pb-0 p-3">
+                                <div class="row">
+                                    <div class="col-6 d-flex align-items-center">
+                                        <h6 class="mb-0">Vet Data</h6>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <button type="submit"
+                                            class="btn btn-outline-primary btn-sm mb-0">Upload</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card-body p-3 pb-0">
-                            <div class="mb-3">
-                                <label class="form-label" for="vets_csv">Select Vet CSV file to upload:</label>
-                                <input type="file" class="form-control form-control-sm border border-2 p-2" name="vets_csv" id="vets_csv" required>
+                            <div class="card-body p-3 pb-0">
+                                <div class="mb-3">
+                                    <label class="form-label" for="vets_csv">Select Vet CSV file to upload:</label>
+                                    <input type="file" class="form-control form-control-sm border border-2 p-2"
+                                        name="vets_csv" id="vets_csv" required>
+                                </div>
                             </div>
-                        </div>
                         </form>
                     </div>
                 </div>
@@ -114,34 +126,41 @@
                     <!-- SERVICE DATA UPLOAD CARD -->
                     <div class="col-lg-4">
                         <div class="card h-100">
-                            <form action="" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('upload.services') }}" method="POST" enctype="multipart/form-data">
                                 @csrf {{-- CSRF token for security --}}
-                            <div class="card-header pb-0 p-3">
-                                <div class="row">
-                                    <div class="col-6 d-flex align-items-center">
-                                        <h6 class="mb-0">Service Data</h6>
-                                    </div>
-                                    <div class="col-6 text-end">
-                                        <button type="submit" class="btn btn-outline-primary btn-sm mb-0">Upload</button>
+                                <div class="card-header pb-0 p-3">
+                                    <div class="row">
+                                        <div class="col-6 d-flex align-items-center">
+                                            <h6 class="mb-0">Service Data</h6>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                            <button type="submit"
+                                                class="btn btn-outline-primary btn-sm mb-0">Upload</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card-body p-3 pb-0">
-                                <div class="mb-3">
-                                    <label class="form-label" for="file">Select Services CSV file to upload:</label>
-                                    <input type="file" class="form-control form-control-sm border border-2 p-2" name="csv_file" id="file" required>
+                                <div class="card-body p-3 pb-0">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="file">Select Services CSV file to
+                                            upload:</label>
+                                        <input type="file"
+                                            class="form-control form-control-sm border border-2 p-2 @error('csv_file') is-invalid @enderror"
+                                            name="csv_file" id="file">
+                                        @error('csv_file')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
                         </div>
                     </div>
-
+                </div>
 
             </div>
-
+            <x-footers.auth></x-footers.auth>
         </div>
-        <x-footers.auth></x-footers.auth>
-    </div>
-    <x-plugins></x-plugins>
+        <x-plugins></x-plugins>
 
 </x-layout>
