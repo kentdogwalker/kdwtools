@@ -160,6 +160,6 @@ class Pet extends Model
 
     public function hotelbookings()
     {
-        return $this->hasMany(Hotelbookings::class, 'HotelBookingID');
+        return $this->hasMany(Hotelbookings::class, 'PetID');
     }
 }

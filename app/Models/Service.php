@@ -39,7 +39,8 @@ class Service extends Model
         'Address3',
         'AddressTown',
         'AddressState',
-        'AddressZip'
+        'AddressZip',
+        'DogPhoto'
     ];
 
     public function clients()
