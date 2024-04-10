@@ -284,6 +284,7 @@ class ServiceService
                   "AddressTown" => $key["Address-town [Main Contact-Client Details]"],
                   "AddressState" => $key["Address-state [Main Contact-Client Details]"],
                   "AddressZip" => $key["Address-zip [Main Contact-Client Details]"],
+                  "DogPhoto" => null
             ];
       }
 }

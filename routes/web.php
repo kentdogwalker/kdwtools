@@ -88,6 +88,9 @@ Route::group(['middleware' => 'auth'], function () {
 	})->name('user-profile');
 	Route::get('hotel.unassignedbookings', [HotelbookingsController::class, 'index'])->name('hotel-unassignedbookings');
 	Route::patch('hotel.unassignedbookings/assign/{id}', [HotelbookingsController::class, 'assign'])->name('hotel-unassignedbookings.assign');
+	Route::post('hotel.unassignedbookings/upload-service-photo', [HotelbookingsController::class, 'uploadServicePhoto'])->name('hotel-unassignedbookings.upload-service-photo');
+	Route::patch('hotel.assignedbookings/update/{id}', [HotelbookingsController::class, 'update'])->name('hotel-assignedbookings.update');
+	Route::patch('hotel.assignedbookings/upload-dog-photo/{id}', [HotelbookingsController::class, 'uploadDogPhoto'])->name('hotel-assignedbookings.upload-dog-photo');
 
 	Route::get('/upload', [PspUploadController::class, 'showForm'])->name('psp.upload.form');
 	Route::post('/upload', [PspUploadController::class, 'upload'])->name('psp.upload');

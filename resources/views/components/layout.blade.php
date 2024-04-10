@@ -42,15 +42,19 @@
         .underline-custom::after {
             content: '';
             position: absolute;
-            bottom: -2px; /* Adjust the distance to the text */
+            bottom: -2px;
+            /* Adjust the distance to the text */
             left: 0;
             width: 100%;
-            border-bottom: 1px solid #FFF; /* Adjust the thickness and color of the line */
+            border-bottom: 1px solid #FFF;
+            /* Adjust the thickness and color of the line */
         }
+
         .underline-custom {
             display: inline-block;
             position: relative;
-            border-bottom: 1px solid transparent; /* Prevents text descenders from being clipped */
+            border-bottom: 1px solid transparent;
+            /* Prevents text descenders from being clipped */
         }
     </style>
 </head>

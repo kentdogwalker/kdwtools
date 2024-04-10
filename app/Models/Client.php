@@ -164,11 +164,11 @@ class Client extends Model
 
     public function pets()
     {
-        return $this->hasMany(Pet::class, 'PetID');
+        return $this->hasMany(Pet::class, 'ClientID');
     }
 
     public function services()
     {
-        return $this->hasMany(Service::class, 'id');
+        return $this->hasMany(Service::class, 'ClientID');
     }
 }
