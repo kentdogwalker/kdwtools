@@ -146,7 +146,7 @@ class ServiceService
                   $duration = $startDate->diff($endDate)->days;
                   $item['StayStart'] = $stayStart;
                   $item['StayEnd'] = $stayEnd;
-                  $item['Duration'] = $duration;
+                  $item['Duration'] = $duration + 1;
             }
 
             return $newTemps;
