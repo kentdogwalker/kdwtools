@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 
-class UploadClientsRequest extends FormRequest
+class UploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,9 @@ class UploadClientsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'clients_file' => 'required|file|mimes:csv,txt|max:2048'
+            'clients_file' => 'required|file|mimes:csv,txt|max:2048',
+            'vets_file' => 'required|file|mimes:csv,txt|max:2048',
+            'pets_file' => 'required|file|mimes:csv,txt|max:2048',
         ];
     }
 

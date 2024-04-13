@@ -94,9 +94,5 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('/upload', [PspUploadController::class, 'showForm'])->name('psp.upload.form');
 	Route::post('/upload', [PspUploadController::class, 'upload'])->name('psp.upload');
-
-	Route::post('/upload-pets', [PspUploadController::class, 'uploadPets'])->name('pets.upload');
-
-	Route::post('/upload-vets', [PspUploadController::class, 'uploadVets'])->name('upload.vets');
 	Route::post('/upload-services', [PspUploadController::class, 'uploadServices'])->name('upload.services');
 });

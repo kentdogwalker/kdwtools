@@ -57,10 +57,13 @@
             /* Prevents text descenders from being clipped */
         }
     </style>
+    @stack('css')
+    @stack('header-script')
 </head>
 
 <body class="{{ $bodyClass }}">
     @include('sweetalert::alert')
+    @stack('preloader')
     {{ $slot }}
 
     <script src="{{ asset('assets') }}/js/core/popper.min.js"></script>

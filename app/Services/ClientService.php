@@ -3,9 +3,32 @@
 namespace App\Services;
 
 use App\Models\Client;
+use Illuminate\Support\Facades\Log;
 
 class ClientService
 {
+      private $uploaded;
+
+      public function __construct()
+      {
+            $this->uploaded = new UploadedService;
+      }
+
+      public function importConversion($clientSRecords)
+      {
+            try {
+                  foreach ($clientSRecords as $record) {
+                        $this->csvUpdateOrCreate($record);
+                  }
+                  $this->uploaded->createOrUpdateData('clients');
+            } catch (\Exception $e) {
+                  Log::error("Error processing CSV import: {$e->getMessage()}");
+                  alert()->error('Error', 'There was an issue processing your Client CSV file. 
+                  Please check the Laravel log for details.');
+                  return redirect()->back();
+            }
+      }
+
       public function csvUpdateOrCreate($record)
       {
             // Adjust boolean fields as necessary

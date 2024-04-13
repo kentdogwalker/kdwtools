@@ -6,6 +6,17 @@
         <!-- Navbar -->
         <x-navbars.navs.auth titlePage='PSP Data Upload'></x-navbars.navs.auth>
         <!-- End Navbar -->
+        @push('preloader')
+            <div id="preloader"
+                style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); z-index: 9999;">
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p style="text-align: center; margin-top: 1rem;">Loading...</p>
+                </div>
+            </div>
+        @endpush
 
         <div class="container-fluid px-2 px-md-4">
             <div class="page-header min-height-300 border-radius-xl mt-4"
@@ -31,18 +42,17 @@
 
         </div>
 
-
         <div class="container-fluid py-4">
             <div class="row">
                 <!-- CLIENT DATA UPLOAD CARD -->
-                <div class="col-lg-4">
+                <div class="col-lg-12">
                     <div class="card h-100">
                         <form action="{{ route('psp.upload') }}" method="POST" enctype="multipart/form-data">
-                            @csrf {{-- CSRF token for security --}}
+                            @csrf
                             <div class="card-header pb-0 p-3">
                                 <div class="row">
                                     <div class="col-6 d-flex align-items-center">
-                                        <h6 class="mb-0">Client Data</h6>
+                                        <h6 class="mb-0">Client Data, Pet Data & Vet Data</h6>
                                     </div>
                                     <div class="col-6 text-end">
                                         <button type="submit"
@@ -51,76 +61,66 @@
                                 </div>
                             </div>
                             <div class="card-body p-3 pb-0">
-                                <div class="mb-3">
-                                    <label class="form-label" for="file">Select Client CSV file to upload:</label>
-                                    <input type="file"
-                                        class="form-control form-control-sm border border-2 p-2 @error('clients_file') is-invalid @enderror"
-                                        name="clients_file" id="file">
-                                    @error('clients_file')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
+                                <div class="row mb-3">
+                                    <div class="col-lg-4">
+                                        <div class="mb-3 position-relative">
+                                            <label class="form-label" for="file">Select Client CSV file to
+                                                upload:</label>
+                                            <input type="file"
+                                                class="form-control form-control-sm border border-2 p-2 @error('clients_file') is-invalid @enderror"
+                                                name="clients_file" id="clients_file">
+                                            @error('clients_file')
+                                                <div class="invalid-feedback" style="font-size: 0.77em">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                            <small class="position-absolute bottom-35 end-0 {{ $client['class'] }}"
+                                                style="font-size: 0.75em">
+                                                <i class="material-icons" style="font-size: 11px">schedule</i>
+                                                {{ $client['info'] }}</small>
                                         </div>
-                                    @enderror
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-3  position-relative">
+                                            <label class="form-label" for="vets_file">Select Vet CSV file to
+                                                upload:</label>
+                                            <input type="file"
+                                                class="form-control form-control-sm border border-2 p-2 @error('vets_file') is-invalid @enderror"
+                                                name="vets_file" id="vets_file">
+                                            @error('vets_file')
+                                                <div class="invalid-feedback" style="font-size: 0.77em">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                            <small class="position-absolute bottom-35 end-0 {{ $vet['class'] }}"
+                                                style="font-size: 0.75em">
+                                                <i class="material-icons" style="font-size: 11px">schedule</i>
+                                                {{ $vet['info'] }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-3 position-relative">
+                                            <label class="form-label" for="pets_file">Select Pet CSV file to
+                                                upload:</label>
+                                            <input type="file"
+                                                class="form-control form-control-sm border border-2 p-2 @error('pets_file') is-invalid @enderror"
+                                                name="pets_file" id="pets_file">
+                                            @error('pets_file')
+                                                <div class="invalid-feedback" style="font-size: 0.77em">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                            <small class="position-absolute bottom-35 end-0 {{ $pet['class'] }}"
+                                                style="font-size: 0.75em">
+                                                <i class="material-icons" style="font-size: 11px">schedule</i>
+                                                {{ $pet['info'] }}</small>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
-
-                <!-- PET DATA UPLOAD CARD -->
-                <div class="col-lg-4">
-                    <div class="card h-100">
-                        <form action="{{ route('pets.upload') }}" method="POST" enctype="multipart/form-data">
-                            @csrf {{-- CSRF token for security --}}
-                            <div class="card-header pb-0 p-3">
-                                <div class="row">
-                                    <div class="col-6 d-flex align-items-center">
-                                        <h6 class="mb-0">Pet Data</h6>
-                                    </div>
-                                    <div class="col-6 text-end">
-                                        <button type="submit"
-                                            class="btn btn-outline-primary btn-sm mb-0">Upload</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body p-3 pb-0">
-                                <div class="mb-3">
-                                    <label class="form-label" for="pets_file">Select Pet CSV file to upload:</label>
-                                    <input type="file" class="form-control form-control-sm border border-2 p-2"
-                                        name="pets_file" id="pets_file" required>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- VET DATA UPLOAD CARD -->
-                <div class="col-lg-4">
-                    <div class="card h-100">
-                        <form action="{{ route('upload.vets') }}" method="POST" enctype="multipart/form-data">
-                            @csrf {{-- CSRF token for security --}}
-                            <div class="card-header pb-0 p-3">
-                                <div class="row">
-                                    <div class="col-6 d-flex align-items-center">
-                                        <h6 class="mb-0">Vet Data</h6>
-                                    </div>
-                                    <div class="col-6 text-end">
-                                        <button type="submit"
-                                            class="btn btn-outline-primary btn-sm mb-0">Upload</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body p-3 pb-0">
-                                <div class="mb-3">
-                                    <label class="form-label" for="vets_csv">Select Vet CSV file to upload:</label>
-                                    <input type="file" class="form-control form-control-sm border border-2 p-2"
-                                        name="vets_csv" id="vets_csv" required>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
 
                 <div class="row mt-3">
                     <!-- SERVICE DATA UPLOAD CARD -->
@@ -140,17 +140,23 @@
                                     </div>
                                 </div>
                                 <div class="card-body p-3 pb-0">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="file">Select Services CSV file to
-                                            upload:</label>
-                                        <input type="file"
-                                            class="form-control form-control-sm border border-2 p-2 @error('csv_file') is-invalid @enderror"
-                                            name="csv_file" id="file">
-                                        @error('csv_file')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
+                                    <div class="row mb-3">
+                                        <div class="mb-3 position-relative">
+                                            <label class="form-label" for="file">Select Services CSV file to
+                                                upload:</label>
+                                            <input type="file"
+                                                class="form-control form-control-sm border border-2 p-2 @error('csv_file') is-invalid @enderror"
+                                                name="csv_file" id="file">
+                                            @error('csv_file')
+                                                <div class="invalid-feedback" style="font-size: 0.77em">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                            <small class="position-absolute bottom-35 end-3 {{ $service['class'] }}"
+                                                style="font-size: 0.75em">
+                                                <i class="material-icons" style="font-size: 11px">schedule</i>
+                                                {{ $service['info'] }}</small>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -161,6 +167,31 @@
             </div>
             <x-footers.auth></x-footers.auth>
         </div>
+
         <x-plugins></x-plugins>
 
+        @push('header-script')
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const myPreloader = document.querySelector("#preloader");
+                    myPreloader.style.display = "block"; // Tampilkan preloader saat halaman dimuat
+
+                    // Event listener untuk mendeteksi ketika seluruh halaman selesai dimuat
+                    window.addEventListener("load", function() {
+                        setTimeout(function() {
+                            myPreloader.remove(); // Hapus preloader setelah selesai dimuat
+                        }, 500); // Tambahkan penundaan jika diperlukan
+                    });
+                });
+            </script>
+        @endpush
+        @push('script')
+            <script>
+                // Event listener untuk menampilkan preloader saat form disubmit
+                document.addEventListener("submit", function(event) {
+                    const myPreloader = document.querySelector("#preloader");
+                    myPreloader.style.display = "block"; // Tampilkan preloader saat form disubmit
+                });
+            </script>
+        @endpush
 </x-layout>
