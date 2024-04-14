@@ -265,8 +265,24 @@
                                                 <tr>
                                                     <td>
                                                         <div class="d-flex px-2 py-1">
+                                                            @php
+                                                                if ($booking->DogPhoto === null) {
+                                                                    $breed_image_path =
+                                                                        'assets/img/dogs/breeds/' .
+                                                                        $booking->Pets->Breed;
+                                                                    $src_image = asset(
+                                                                        file_exists(public_path($breed_image_path))
+                                                                            ? $breed_image_path
+                                                                            : 'assets/img/dogs/breeds/default.jpg',
+                                                                    );
+                                                                } else {
+                                                                    $src_image = asset(
+                                                                        'storage/dog-photos/' . $booking->DogPhoto,
+                                                                    );
+                                                                }
+                                                            @endphp
                                                             <div>
-                                                                <img src="{{ asset('storage/dog-photos/' . $booking->DogPhoto) }}"
+                                                                <img src="{{ $src_image }}"
                                                                     class="avatar avatar-sm me-3 border-radius-lg"
                                                                     alt="{{ $booking->DogName }}">
                                                             </div>
@@ -348,6 +364,14 @@
                                                             <button class="btn btn-primary btn-sm update-assign-button"
                                                                 type="button"
                                                                 data-form-id="updateAssignForm{{ $booking->HotelBookingID }}">Update</button>
+                                                            <a type="button" class="btn btn-outline-secondary btn-sm"
+                                                                href="{{ route('hotel-assignedbookings.delete', $booking->HotelBookingID) }}"
+                                                                data-confirm-delete="true">
+                                                                <span class="delete-btn">
+                                                                    <i class="material-icons"
+                                                                        style="font-size: 1rem">delete</i>
+                                                                </span>
+                                                            </a>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -482,8 +506,8 @@
                             text: "You want to assign this booking?",
                             icon: 'warning',
                             showCancelButton: true,
-                            confirmButtonColor: '#D20062',
-                            cancelButtonColor: '#637A9F',
+                            confirmButtonColor: '#2778c4',
+                            cancelButtonColor: '#757575',
                             confirmButtonText: 'Yes, I am'
                         }).then((result) => {
                             if (result.isConfirmed) {
@@ -503,8 +527,8 @@
                             text: "You want to update this assigned booking?",
                             icon: 'warning',
                             showCancelButton: true,
-                            confirmButtonColor: '#D20062',
-                            cancelButtonColor: '#637A9F',
+                            confirmButtonColor: '#2778c4',
+                            cancelButtonColor: '#757575',
                             confirmButtonText: 'Yes, I am'
                         }).then((result) => {
                             if (result.isConfirmed) {
@@ -512,6 +536,31 @@
                             }
                         });
                     });
+                });
+            });
+
+            $(document).ready(function() {
+                $('.delete-btn').on('click', function(e) {
+                    e.preventDefault();
+
+                    var deleteUrl = $(this).closest('a').attr('href');
+
+                    // Tampilkan sweet alert
+                    Swal.fire({
+                            title: "Are you sure?",
+                            text: "You want to delete this booking?",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: '#2778c4',
+                            cancelButtonColor: '#757575',
+                            confirmButtonText: 'Yes, delete it!'
+                        })
+                        .then((result) => {
+                            if (result.isConfirmed) {
+                                // Jika pengguna mengonfirmasi penghapusan, alihkan ke URL penghapusan
+                                window.location.href = deleteUrl;
+                            }
+                        });
                 });
             });
         </script>

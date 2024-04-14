@@ -74,10 +74,11 @@
                                                     {{ $message }}
                                                 </div>
                                             @enderror
-                                            <small class="position-absolute bottom-35 end-0 {{ $client['class'] }}"
-                                                style="font-size: 0.75em">
-                                                <i class="material-icons" style="font-size: 11px">schedule</i>
-                                                {{ $client['info'] }}</small>
+                                            <div
+                                                class="d-flex position-absolute bottom-35 end-0 mt-1 {{ $client['class'] }}">
+                                                <i class="material-icons text-xs my-auto me-1">schedule</i>
+                                                <p class="mb-0 text-xs">{{ $client['info'] }}</p>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
@@ -92,10 +93,11 @@
                                                     {{ $message }}
                                                 </div>
                                             @enderror
-                                            <small class="position-absolute bottom-35 end-0 {{ $vet['class'] }}"
-                                                style="font-size: 0.75em">
-                                                <i class="material-icons" style="font-size: 11px">schedule</i>
-                                                {{ $vet['info'] }}</small>
+                                            <div
+                                                class="d-flex position-absolute bottom-35 end-0 mt-1 {{ $vet['class'] }}">
+                                                <i class="material-icons text-xs my-auto me-1">schedule</i>
+                                                <p class="mb-0 text-xs">{{ $vet['info'] }}</p>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
@@ -110,10 +112,11 @@
                                                     {{ $message }}
                                                 </div>
                                             @enderror
-                                            <small class="position-absolute bottom-35 end-0 {{ $pet['class'] }}"
-                                                style="font-size: 0.75em">
-                                                <i class="material-icons" style="font-size: 11px">schedule</i>
-                                                {{ $pet['info'] }}</small>
+                                            <div
+                                                class="d-flex position-absolute bottom-35 end-0 mt-1 {{ $pet['class'] }}">
+                                                <i class="material-icons text-xs my-auto me-1">schedule</i>
+                                                <p class="mb-0 text-xs">{{ $pet['info'] }}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -152,10 +155,12 @@
                                                     {{ $message }}
                                                 </div>
                                             @enderror
-                                            <small class="position-absolute bottom-35 end-3 {{ $service['class'] }}"
-                                                style="font-size: 0.75em">
-                                                <i class="material-icons" style="font-size: 11px">schedule</i>
-                                                {{ $service['info'] }}</small>
+                                            <div
+                                                class="d-flex position-absolute bottom-35 end-3 mt-1 {{ $service['class'] }}">
+                                                <i class="material-icons text-xs my-auto me-1">schedule</i>
+                                                <p class="mb-0 text-xs">
+                                                    {{ $service['info'] }}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

@@ -31,6 +31,7 @@ class HotelbookingsController extends Controller
             ->get();
         $pets = Pet::all();
         $bookings = Hotelbookings::all();
+        confirmDelete('Are you sure?', 'You want to delete this booking?');
         return view('hotel.unassignedbookings', compact('services', 'pets', 'bookings'));
     }
 
@@ -117,6 +118,15 @@ class HotelbookingsController extends Controller
             ]);
         }
         alert()->success('Success', 'The data has been successfully updated.');
+        return redirect()->back();
+    }
+
+    public function delete($id)
+    {
+        self::deleteDogPhotoService($id, 'delete');
+        $hotelBookings = Hotelbookings::find($id);
+        $hotelBookings->delete();
+        alert()->success('Success', 'The data has been successfully deleted.');
         return redirect()->back();
     }
 
