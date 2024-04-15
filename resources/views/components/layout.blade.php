@@ -36,8 +36,9 @@
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <!-- CSS Files -->
-    <link id="pagestyle" href="{{ asset('assets') }}/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
-
+    {{-- <link id="pagestyle" href="{{ asset('assets') }}/css/material-dashboard.css?v=3.0.0" rel="stylesheet" /> --}}
+    <link rel="stylesheet" href="{{ asset('assets') }}/css/material-dashboard.min.css" type="text/css">
+    @stack('css')
     <style>
         .underline-custom::after {
             content: '';
@@ -57,8 +58,8 @@
             /* Prevents text descenders from being clipped */
         }
     </style>
-    @stack('css')
     @stack('header-script')
+    @livewireStyles
 </head>
 
 <body class="{{ $bodyClass }}">
@@ -66,11 +67,11 @@
     @stack('preloader')
     {{ $slot }}
 
+    <script src="{{ asset('assets') }}/js/jquery.min.js" type="text/javascript"></script>
     <script src="{{ asset('assets') }}/js/core/popper.min.js"></script>
     <script src="{{ asset('assets') }}/js/core/bootstrap.min.js"></script>
     <script src="{{ asset('assets') }}/js/plugins/perfect-scrollbar.min.js"></script>
     <script src="{{ asset('assets') }}/js/plugins/smooth-scrollbar.min.js"></script>
-    @stack('js')
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
         if (win && document.querySelector('#sidenav-scrollbar')) {
@@ -83,7 +84,10 @@
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="{{ asset('assets') }}/js/material-dashboard.min.js?v=3.0.0"></script>
+    {{-- <script src="{{ asset('assets') }}/js/material-dashboard.min.js?v=3.0.0"></script> --}}
+    <script src="{{ asset('assets') }}/js/material-dashboard.min.js" type="text/javascript"></script>
+    @stack('js')
+    @livewireScripts
 </body>
 
 </html>

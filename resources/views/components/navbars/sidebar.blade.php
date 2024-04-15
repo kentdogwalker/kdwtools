@@ -93,7 +93,8 @@
 
             <!-- HOTEL MANAGEMENT SECTION -->
             <li class="nav-item mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Hotel Management</h6>
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Hotel Management
+                </h6>
             </li>
 
 
@@ -108,8 +109,8 @@
             </li>
 
             <li class="nav-item mt-0">
-                <a class="nav-link text-white {{ $activePage == 'notifications' ? ' active bg-gradient-primary' : '' }}  "
-                    href="{{ route('notifications') }}">
+                <a class="nav-link text-white {{ $activePage == 'hotelschedule' ? ' active bg-gradient-primary' : '' }}  "
+                    href="{{ route('hotel-booking-schedule') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">event_note</i>
                     </div>
@@ -124,8 +125,7 @@
             </li>
 
             <li class="nav-item mt-0">
-                <a class="nav-link text-white"
-                    href="">
+                <a class="nav-link text-white" href="">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">videocam</i>
                     </div>
@@ -135,7 +135,8 @@
 
             <!-- Server Management - Collapsible Trigger -->
             <li class="nav-item">
-                <a class="nav-link text-white collapsed" href="#serverManagementCollapse" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="serverManagementCollapse">
+                <a class="nav-link text-white collapsed" href="#serverManagementCollapse" data-bs-toggle="collapse"
+                    role="button" aria-expanded="false" aria-controls="serverManagementCollapse">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">dvr</i>
                     </div>
@@ -148,7 +149,8 @@
                 <ul class="navbar-nav">
                     <li class="nav-item mt-0">
                         <a class="nav-link text-white " href="">
-                            <div class="text-white text-center ms-2 me-2 d-flex align-items-center justify-content-center">
+                            <div
+                                class="text-white text-center ms-2 me-2 d-flex align-items-center justify-content-center">
                                 <i class="material-icons opacity-10" style="font-size: 16px;">screenshot_monitor</i>
                             </div>
                             <span class="nav-link-text ms-1">Citadel (Unraid)</span>
@@ -156,7 +158,8 @@
                     </li>
                     <li class="nav-item mt-0">
                         <a class="nav-link text-white " href="">
-                            <div class="text-white text-center ms-2 me-2 d-flex align-items-center justify-content-center">
+                            <div
+                                class="text-white text-center ms-2 me-2 d-flex align-items-center justify-content-center">
                                 <i class="material-icons opacity-10" style="font-size: 16px;">screenshot_monitor</i>
                             </div>
                             <span class="nav-link-text ms-1">The Ark (Unraid)</span>
@@ -164,7 +167,8 @@
                     </li>
                     <li class="nav-item mt-0">
                         <a class="nav-link text-white " href="">
-                            <div class="text-white text-center ms-2 me-2 d-flex align-items-center justify-content-center">
+                            <div
+                                class="text-white text-center ms-2 me-2 d-flex align-items-center justify-content-center">
                                 <i class="material-icons opacity-10" style="font-size: 16px;">screenshot_monitor</i>
                             </div>
                             <span class="nav-link-text ms-1">Webserver (Citadel-VM)</span>
@@ -197,26 +201,25 @@
 
     <div class="sidenav-footer position-absolute w-100 bottom-0 align-items-center">
         <div class="mx-3">
-            <a class="btn btn-primary w-100"
-                href="{{ route('psp.upload.form') }}" type="button">
+            <a class="btn btn-primary w-100" href="{{ route('psp.upload.form') }}" type="button">
                 <i style="font-size: 1rem;" class="material-icons opacity-10 ps-0 pe-2 text-center">cloud_upload</i>
                 <span class="ms-1">Upload PSP Data</span>
             </a>
         </div>
 
         <div class="mx-3">
-            <a class="btn btn-outline-primary w-100"
-                href="https://0508kentdogwalkergroup.petsoftware.net/" target="_blank" type="button" style="color: #5AB7B7; border-color: #5AB7B7;">
+            <a class="btn btn-outline-primary w-100" href="https://0508kentdogwalkergroup.petsoftware.net/"
+                target="_blank" type="button" style="color: #5AB7B7; border-color: #5AB7B7;">
                 <i style="font-size: 1rem;" class="fas fa-paw ps-0 pe-2 text-center"></i>
                 <span class="ms-1">Pet Sitter Plus</span>
             </a>
         </div>
 
         <div class="mx-3">
-            <a class="btn btn-outline-primary w-100"
-            href="https://manage.gocardless.com/" target="_blank" type="button" style="color: #f1f252; border-color: #f1f252;">
-            <i style="font-size: 1rem;" class="fas fa-credit-card ps-0 pe-2 text-center"></i>
-            <span class="ms-1">GoCardless</span>
+            <a class="btn btn-outline-primary w-100" href="https://manage.gocardless.com/" target="_blank"
+                type="button" style="color: #f1f252; border-color: #f1f252;">
+                <i style="font-size: 1rem;" class="fas fa-credit-card ps-0 pe-2 text-center"></i>
+                <span class="ms-1">GoCardless</span>
             </a>
         </div>
 
@@ -226,4 +229,3 @@
 
 
 </aside>
-

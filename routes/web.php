@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookingScheduleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -93,6 +94,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::patch('hotel.assignedbookings/upload-dog-photo/{id}', [HotelbookingsController::class, 'uploadDogPhoto'])->name('hotel-assignedbookings.upload-dog-photo');
 	Route::delete('hotel.assignedbookings/delete/{id}', [HotelbookingsController::class, 'delete'])->name('hotel-assignedbookings.delete');
 	Route::get('hotel.assignedbookings/delete/{id}', [HotelbookingsController::class, 'delete'])->name('hotel-assignedbookings.delete');
+	Route::get('hotel/booking-schedule', [BookingScheduleController::class, 'index'])->name('hotel-booking-schedule');
 
 	Route::get('/upload', [PspUploadController::class, 'showForm'])->name('psp.upload.form');
 	Route::post('/upload', [PspUploadController::class, 'upload'])->name('psp.upload');
