@@ -63,6 +63,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('billing', function () {
 		return view('pages.billing');
 	})->name('billing');
+    Route::get('dduploader', function () {
+		return view('dduploader.uploader');
+	})->name('dduploader');
 	Route::get('tables', function () {
 		return view('pages.tables');
 	})->name('tables');

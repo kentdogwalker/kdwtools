@@ -15,7 +15,7 @@
                 <div class="card-header pb-0 p-3">
                     <div class="row">
                         <div class="col-6 d-flex align-items-center">
-                            <h6 class="mb-0">Client Data, Pet Data & Vet Data</h6>
+                            <h6 class="mb-0">Client, Pet & Vet Data CSVs</h6>
                         </div>
                         <div class="col-6 text-end">
                             <button type="submit" class="btn btn-outline-primary btn-sm mb-0">Upload</button>

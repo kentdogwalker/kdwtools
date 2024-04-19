@@ -55,8 +55,8 @@
             </li>
 
             <li class="nav-item mt-0">
-                <a class="nav-link text-white {{ $activePage == 'billing' ? ' active bg-gradient-primary' : '' }}  "
-                    href="{{ route('billing') }}">
+                <a class="nav-link text-white {{ $activePage == 'dduploader' ? ' active bg-gradient-primary' : '' }}  "
+                    href="{{ route('dduploader') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">price_change</i>
                     </div>
