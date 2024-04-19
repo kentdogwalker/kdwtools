@@ -10,9 +10,7 @@
     </div>
     <div class="col-lg-4">
         <div class="card h-100">
-            {{-- <form action="{{ route('upload.services') }}" method="POST" enctype="multipart/form-data"> --}}
             <form wire:submit.prevent="store" enctype="multipart/form-data">
-                {{-- @csrf CSRF token for security --}}
                 <div class="card-header pb-0 p-3">
                     <div class="row">
                         <div class="col-6 d-flex align-items-center">
