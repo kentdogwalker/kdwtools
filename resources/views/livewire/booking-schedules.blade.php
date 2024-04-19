@@ -43,7 +43,7 @@
     <div class="row p-4">
         <div class="table-responsive">
             <table class="table table-bordered text-nowrap overflow-hidden"
-                style="border-color: rgba(166, 175, 171, 0.66);margin-bottom: 10px;">
+                style="border-color: rgba(166, 175, 171, 0.66);margin-bottom: 10px; border-collapse: collapse;">
                 <thead style="background-color: #ef3472" class="text-white">
                     <tr>
                         <th>Room</th>
@@ -56,12 +56,13 @@
                 <tbody class="text-white">
                     @foreach ($schedules as $schedule)
                         <tr>
-                            <td class="text-dark">
+                            <td class="text-dark" style="border: 1px solid #dee2e6;">
                                 {{ '[' . $schedule['room_id'] . '] ' . $schedule['room_name'] }}
                             </td>
                             @foreach ($schedule['booking'] as $item)
                                 @if (!empty($item['clients']))
-                                    <td colspan="{{ $item['clients']['duration'] }}" style="width: 100%;height:100%">
+                                    <td colspan="{{ $item['clients']['duration'] }}"
+                                        style="width: 100%;height:100%;border: 1px solid #dee2e6;">
                                         <div class="card" style="background-color: #f1437d">
                                             <div class="card-body">
                                                 <div class="col-lg-12 col-md-12 col-sm-12">
@@ -124,7 +125,7 @@
                                         </div>
                                     </td>
                                 @else
-                                    <td></td>
+                                    <td style="border: 1px solid #dee2e6;"></td>
                                 @endif
                             @endforeach
                         </tr>
