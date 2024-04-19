@@ -41,7 +41,6 @@ class PspUploads extends Component
             'client' => $this->uploadedService->getInformation(1),
             'vet' => $this->uploadedService->getInformation(2),
             'pet' => $this->uploadedService->getInformation(3),
-            'service' => $this->uploadedService->getInformation(4)
         ];
 
         return view('livewire.psp-uploads', $data);

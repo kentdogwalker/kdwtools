@@ -100,6 +100,4 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('hotel/booking-schedule', [BookingScheduleController::class, 'index'])->name('hotel-booking-schedule');
 
 	Route::get('/upload', [PspUploadController::class, 'showForm'])->name('psp.upload.form');
-	Route::post('/upload', [PspUploadController::class, 'upload'])->name('psp.upload');
-	Route::post('/upload-services', [PspUploadController::class, 'uploadServices'])->name('upload.services');
 });
