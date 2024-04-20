@@ -71,14 +71,32 @@
                                                             <div class="d-flex px-2 py-1">
                                                                 @php
                                                                     if ($item['clients']['dog_photo'] === null) {
-                                                                        $breed_image_path =
-                                                                            'assets/img/dogs/breeds/' .
-                                                                            $item['clients']['breed'];
-                                                                        $src_image = asset(
-                                                                            file_exists(public_path($breed_image_path))
-                                                                                ? $breed_image_path
-                                                                                : 'assets/img/dogs/breeds/default.jpg',
+                                                                        $breed = strtolower($item['clients']['breed']);
+                                                                        $breed_images_path = public_path(
+                                                                            'assets/img/dogs/breeds/',
                                                                         );
+                                                                        $arr = scandir($breed_images_path);
+                                                                        $maxSimilarity = 43;
+                                                                        $matching_file = null;
+
+                                                                        foreach ($arr as $value) {
+                                                                            similar_text($breed, $value, $similarity);
+                                                                            if ($similarity > $maxSimilarity) {
+                                                                                $maxSimilarity = $similarity;
+                                                                                $matching_file = $value;
+                                                                            }
+                                                                        }
+
+                                                                        if (!empty($matching_file)) {
+                                                                            $src_image = asset(
+                                                                                'assets/img/dogs/breeds/' .
+                                                                                    $matching_file,
+                                                                            );
+                                                                        } else {
+                                                                            $src_image = asset(
+                                                                                'assets/img/dogs/breeds/default.jpg',
+                                                                            );
+                                                                        }
                                                                     } else {
                                                                         $src_image = asset(
                                                                             'storage/dog-photos/' .
