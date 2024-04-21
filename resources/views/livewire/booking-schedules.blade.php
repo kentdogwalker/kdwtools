@@ -46,9 +46,10 @@
                 style="border-color: rgba(166, 175, 171, 0.66);margin-bottom: 10px; border-collapse: collapse;">
                 <thead style="background-color: #ef3472" class="text-white">
                     <tr>
-                        <th>Room</th>
+                        <th style="width: 10%;">Room</th>
                         @for ($i = 0; $i < 7; $i++)
-                            <th>{{ \Carbon\Carbon::parse($startDate)->addDays($i)->format('D d M') }}
+                            <th style="width: 12%;">
+                                {{ \Carbon\Carbon::parse($startDate)->addDays($i)->format('D d M') }}
                             </th>
                         @endfor
                     </tr>
@@ -56,13 +57,15 @@
                 <tbody class="text-white">
                     @foreach ($schedules as $schedule)
                         <tr>
-                            <td class="text-dark" style="border: 1px solid #dee2e6;">
+                            <td class="text-dark" style="border: 1px solid #c3c7cc; width:10%;">
                                 {{ '[' . $schedule['room_id'] . '] ' . $schedule['room_name'] }}
                             </td>
                             @foreach ($schedule['booking'] as $item)
                                 @if (!empty($item['clients']))
-                                    <td colspan="{{ $item['clients']['duration'] }}"
-                                        style="width: 100%;height:100%;border: 1px solid #dee2e6;">
+                                    @php
+                                        $colspan = $item['clients']['duration'] ?? 1;
+                                    @endphp
+                                    <td colspan="{{ $colspan }}" style="border: 1px solid #c3c7cc; width:12%;">
                                         <div class="card" style="background-color: #f1437d">
                                             <div class="card-body">
                                                 <div class="col-lg-12 col-md-12 col-sm-12">
@@ -143,7 +146,20 @@
                                         </div>
                                     </td>
                                 @else
-                                    <td style="border: 1px solid #dee2e6;"></td>
+                                    <td style="border: 1px solid #c3c7cc; width:12%;">
+                                        <div class="card" style="box-shadow: none;">
+                                            <div class="card-body">
+                                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                                    <div class="row mb-3">
+                                                        <p></p>
+                                                    </div>
+                                                    <div class="row">
+                                                        <p></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
                                 @endif
                             @endforeach
                         </tr>
@@ -157,13 +173,33 @@
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
         <script>
             $(function() {
+                let dateInterval = getQueryParameter('date_filter');
+                let start = moment().startOf('last Monday');
+                let end = moment().endOf('this Sunday');
+                if (dateInterval) {
+                    dateInterval = dateInterval.split(' - ');
+                    start = dateInterval[0];
+                    end = dateInterval[1];
+                }
                 $('#date_filter').daterangepicker({
-                    opens: 'right'
-                }, function(start, end, label) {
-                    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end
-                        .format('YYYY-MM-DD'));
+                    startDate: start,
+                    endDate: end,
+                    locale: {
+                        format: 'DD/MM/YYYY',
+                        firstDay: 1,
+                    }
                 });
             });
+
+            function getQueryParameter(name) {
+                const url = window.location.href;
+                name = name.replace(/[\[\]]/g, "\\$&");
+                const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                    results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return '';
+                return decodeURIComponent(results[2].replace(/\+/g, " "));
+            }
         </script>
     @endpush
 </div>

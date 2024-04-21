@@ -46,6 +46,7 @@ class BookingScheduleService
                   foreach ($bookingDates as $date) {
                         $clients = [];
                         $keyFound = null;
+                        $countRoomID = 0;
 
                         foreach ($bookingDates as $key => $value) {
                               if ($value['date'] === $date['date']) {
@@ -57,6 +58,7 @@ class BookingScheduleService
                               if ($booking->RoomID === $room->RoomID) {
                                     $clients[] = [
                                           'booking_id' => $booking->HotelBookingID,
+                                          'room_id' => $booking->RoomID,
                                           'dog_name' => $booking->DogName,
                                           'breed' => $booking->pets->Breed,
                                           'gender' => $booking->pets->Gender,
@@ -208,6 +210,84 @@ class BookingScheduleService
                         'booking' => $bookingsFix
                   ];
             }
-            return $data;
+            $uniqueData = $this->getUniqueSchedule($data);
+            // dd($uniqueData);
+            return $uniqueData;
+      }
+
+      public function getUniqueSchedule($array)
+      {
+            $newArray = $array;
+
+            $tempBookings = [];
+
+            // Loop through each entry in the array
+            foreach ($array as $key => $value) {
+                  // Reset temporary array
+                  $tempBookings = [];
+                  // Loop through each booking in this entry
+                  foreach ($value["booking"] as $bookingKey => $booking) {
+                        // If the booking date already exists in the temporary array
+                        if (isset($tempBookings[$booking["date"]])) {
+                              // Merge client information into existing booking if "clients" key exists
+                              if (isset($booking["clients"])) {
+                                    $tempBookings[$booking["date"]]["clients"] = $booking["clients"];
+                              }
+                        } else {
+                              // Add booking to the temporary array
+                              $tempBookings[$booking["date"]] = $booking;
+                        }
+                  }
+                  // Replace booking with the result of the temporary array
+                  $newArray[$key]["booking"] = array_values($tempBookings);
+            }
+
+            foreach ($newArray as $key => &$arr) {
+                  $last_client_index = null;
+                  $countClient = 0;
+                  $duration = null;
+                  foreach ($arr['booking'] as $key => $booking) {
+                        if (isset($booking['clients'])) {
+                              $last_client_index = $key;
+                              $countClient++;
+                              $duration = $booking['clients']['duration'];
+                        }
+                  }
+                  if ($countClient > 1) {
+                        if ($last_client_index !== null) {
+                              if ($duration) {
+                                    $fixDuration = $duration - 1;
+                                    $fixDuration = $fixDuration < 0 ? 0 : $fixDuration;
+                                    $param = count($arr['booking']);
+                                    $paramFix = $param + $fixDuration;
+                                    $x = $last_client_index + 1;
+                                    for ($i = $x; $i < $paramFix; $i++) {
+                                          if (isset($arr['booking'][$i]['date'])) {
+                                                unset($arr['booking'][$i]);
+                                          }
+                                    }
+                              }
+                        }
+
+                        $totalDuration = 0;
+                        foreach ($arr['booking'] as $book) {
+                              if (isset($book['clients']) && isset($book['clients']['duration'])) {
+                                    $totalDuration += $book['clients']['duration'];
+                              } else {
+                                    $totalDuration += 1;
+                              }
+                        }
+                        if ($totalDuration < 7) {
+                              $lastBookingDate = end($arr['booking'])['date'];
+                              $diff = 7 - $totalDuration;
+                              for ($i = 0; $i < $diff; $i++) {
+                                    $nextDate = date('Y-m-d', strtotime($lastBookingDate . ' + ' . ($i + 1) . ' days'));
+                                    $arr['booking'][] = ["date" => $nextDate];
+                              }
+                        }
+                  }
+            }
+
+            return $newArray;
       }
 }
