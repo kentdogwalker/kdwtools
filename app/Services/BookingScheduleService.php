@@ -31,7 +31,7 @@ class BookingScheduleService
                               ->where('StayEnd', '<=', $end);
                   })
                   ->get();
-
+            // dd($bookings);
             $rooms = Room::all();
             $bookingDates = [];
             for ($i = 0; $i < 7; $i++) {
@@ -40,14 +40,13 @@ class BookingScheduleService
                         'date' => $dateTo
                   ];
             }
+            // dd($bookingDates);
             $data = [];
             foreach ($rooms as $room) {
                   $bookingsFix = [];
                   foreach ($bookingDates as $date) {
                         $clients = [];
                         $keyFound = null;
-                        $countRoomID = 0;
-
                         foreach ($bookingDates as $key => $value) {
                               if ($value['date'] === $date['date']) {
                                     $keyFound = $key + 1;
@@ -68,6 +67,7 @@ class BookingScheduleService
                                           'end' => $booking->StayEnd,
                                           'duration' => $booking->Duration
                                     ];
+                                    $ee[] = $clients;
                               }
                         }
                         if (!empty($clients)) {
@@ -210,8 +210,9 @@ class BookingScheduleService
                         'booking' => $bookingsFix
                   ];
             }
+
             $uniqueData = $this->getUniqueSchedule($data);
-            // dd($uniqueData);
+            $uniqueData = $this->getLongBookingDate($uniqueData, $bookings, $start);
             return $uniqueData;
       }
 
@@ -289,5 +290,36 @@ class BookingScheduleService
             }
 
             return $newArray;
+      }
+
+      private function getLongBookingDate($uniqueData, $bookings, $start)
+      {
+            foreach ($uniqueData as $key => &$value) {
+                  if (empty($value['booking'])) {
+                        foreach ($bookings as $bb) {
+                              if ($value['room_id'] === $bb->RoomID) {
+                                    $clnt = [
+                                          'booking_id' => $bb->HotelBookingID,
+                                          'room_id' => $bb->RoomID,
+                                          'dog_name' => $bb->DogName,
+                                          'breed' => $bb->pets->Breed,
+                                          'gender' => $bb->pets->Gender,
+                                          'dog_photo' => $bb->DogPhoto,
+                                          'owner_name' => $bb->clients->FirstName . ' ' . $bb->clients->LastName,
+                                          'start' => $bb->StayStart,
+                                          'end' => $bb->StayEnd,
+                                          'duration' => 7,
+                                          'status' => "More dates >>>"
+                                    ];
+                                    $value['booking'][] = [
+                                          'date' => $start,
+                                          'clients' => $clnt
+                                    ];
+                                    break;
+                              }
+                        }
+                  }
+            }
+            return $uniqueData;
       }
 }

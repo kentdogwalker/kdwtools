@@ -33,7 +33,7 @@ class Service extends Model
         'UnitPrice',
         'Total',
         'StaffPay',
-        'Invoice',
+        'invoice',
         'Address1',
         'Address2',
         'Address3',

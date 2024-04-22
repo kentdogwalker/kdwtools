@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use DateTime;
 use App\Models\Service;
 
 class ServiceService
@@ -154,52 +155,63 @@ class ServiceService
 
       public function createToServices($key, $type)
       {
-            $existing = $type === 'hotel stays' ? $this->getExistingHotelStays($key) : $this->getExistingOtherData($key);
-
-            if (!$existing) {
-                  $data = $this->getFormatToCreate($key, $type);
-                  Service::create($data);
+            $data = $this->getFormatToCreate($key, $type);
+            if ($type === 'hotel stays') {
+                  $hotelStays = $this->getDataHotelStays();
+                  if ($hotelStays) {
+                        $result = $this->getMergeData($data, $hotelStays);
+                  } else {
+                        $result = $data;
+                  }
+                  $existing = $this->getExistingHotelStays($result);
+                  if (!$existing) {
+                        Service::create($result);
+                  }
+            } else {
+                  $existing = $this->getExistingOtherData($key);
+                  if (!$existing) {
+                        Service::create($data);
+                  }
             }
+      }
+
+      private function getDataHotelStays()
+      {
+            return Service::where('ServiceName', 'LIKE', "%Hotel Stay%")->get()->toArray();
       }
 
       public function getExistingHotelStays($key)
       {
-            $StayStart = \DateTime::createFromFormat('d/m/Y', $key['StayStart']);
-            $StayEnd = \DateTime::createFromFormat('d/m/Y', $key['StayEnd']);
-            $start = $StayStart->format('Y-m-d');
-            $end = $StayEnd->format('Y-m-d');
-            $assignStatus = $key['Status'] === 'Cancelled' ? 'Cancelled' : 'Pending';
-            $Acknowledged = filter_var($key["Acknowledged"], FILTER_VALIDATE_BOOLEAN);
-            return Service::where('ClientID', $key["ClientID"])
+            $result = Service::where('ClientID', $key["ClientID"])
                   ->where('StaffID', $key["StaffID"])
-                  ->where('ServiceName', $key["Service"])
-                  ->where('StayStart', $start)
-                  ->where('StayEnd', $end)
-                  ->where('NominalServiceDuration', $key["Nominal Service Duration"])
+                  ->where('ServiceName', $key["ServiceName"])
+                  ->where('StayStart', $key["StayStart"])
+                  ->where('StayEnd', $key["StayEnd"])
+                  ->where('NominalServiceDuration', $key["NominalServiceDuration"])
                   ->where('Duration', $key["Duration"])
-                  ->where('DisplayTime', $key["Display Time"])
-                  ->where('ScheduleTime', $key["Schedule Time"])
+                  ->where('DisplayTime', $key["DisplayTime"])
+                  ->where('ScheduleTime', $key["ScheduleTime"])
                   ->where('DiaryRef', $key["DiaryRef"])
-                  ->where('StaffFirstName', $key["Staff FirstName"])
-                  ->where('StaffLastName', $key["Staff LastName"])
-                  ->where('Acknowledged', $Acknowledged)
+                  ->where('StaffFirstName', $key["StaffFirstName"])
+                  ->where('StaffLastName', $key["StaffLastName"])
+                  ->where('Acknowledged', $key["Acknowledged"])
                   ->where('Area', $key["Area"])
                   ->where('Status', $key["Status"])
-                  ->where('AssignStatus', $assignStatus)
                   ->where('CheckIn', $key["CheckIn"])
                   ->where('CheckOut', $key["CheckOut"])
                   ->where('Qty', $key["Qty"])
-                  ->where('UnitPrice', $key["Unit Price"])
+                  ->where('UnitPrice', $key["UnitPrice"])
                   ->where('Total', $key["Total"])
-                  ->where('StaffPay', $key["Staff Pay"])
-                  ->where('Invoice', $key["Invoice"])
-                  ->where('Address1', $key["Address-line1 [Main Contact-Client Details]"])
-                  ->where('Address2', $key["Address-line2 [Main Contact-Client Details]"])
-                  ->where('Address3', $key["Address-line3 [Main Contact-Client Details]"])
-                  ->where('AddressTown', $key["Address-town [Main Contact-Client Details]"])
-                  ->where('AddressState', $key["Address-state [Main Contact-Client Details]"])
-                  ->where('AddressZip', $key["Address-zip [Main Contact-Client Details]"])
+                  ->where('StaffPay', $key["StaffPay"])
+                  ->where('invoice', $key["invoice"])
+                  ->where('Address1', $key["Address1"])
+                  ->where('Address2', $key["Address2"])
+                  ->where('Address3', $key["Address3"])
+                  ->where('AddressTown', $key["AddressTown"])
+                  ->where('AddressState', $key["AddressState"])
+                  ->where('AddressZip', $key["AddressZip"])
                   ->first();
+            return $result;
       }
 
       public function getExistingOtherData($key)
@@ -226,7 +238,7 @@ class ServiceService
                   ->where('UnitPrice', $key["Unit Price"])
                   ->where('Total', $key["Total"])
                   ->where('StaffPay', $key["Staff Pay"])
-                  ->where('Invoice', $key["Invoice"])
+                  ->where('invoice', $key["Invoice"])
                   ->where('Address1', $key["Address-line1 [Main Contact-Client Details]"])
                   ->where('Address2', $key["Address-line2 [Main Contact-Client Details]"])
                   ->where('Address3', $key["Address-line3 [Main Contact-Client Details]"])
@@ -277,7 +289,7 @@ class ServiceService
                   "UnitPrice" => $key["Unit Price"],
                   "Total" => $key["Total"],
                   "StaffPay" => $key["Staff Pay"],
-                  "Invoice" => $key["Invoice"],
+                  "invoice" => $key["Invoice"],
                   "Address1" => $key["Address-line1 [Main Contact-Client Details]"],
                   "Address2" => $key["Address-line2 [Main Contact-Client Details]"],
                   "Address3" => $key["Address-line3 [Main Contact-Client Details]"],
@@ -286,5 +298,113 @@ class ServiceService
                   "AddressZip" => $key["Address-zip [Main Contact-Client Details]"],
                   "DogPhoto" => null
             ];
+      }
+
+      private function getMergeData($data, $hotelStays)
+      {
+            $result = null;
+            foreach ($hotelStays as $value) {
+                  // Check if date range items from $a and $b can be merged
+                  $condition = $this->getParamCondition($data, $value);
+                  if ($condition) {
+                        // If items can be merged, merge the data and add to the result
+                        if ($result === null) {
+                              $result = $this->mergeData($data, $value);
+                        } else {
+                              $result = $this->mergeData($result, $value);
+                        }
+                        $service = Service::find($value['id']);
+                        $service->delete();
+                  }
+            }
+            // If no matching item is found, add item from array $a to the result
+            if ($result === null) {
+                  return $result = $data;
+            }
+            return $result;
+      }
+
+      private function mergeData($data, $value)
+      {
+            // Convert dates to DateTime objects
+            $stayStart = min($data['StayStart'], $value['StayStart']);
+            $stayEnd = max($data['StayEnd'], $value['StayEnd']);
+            $startDate = \DateTime::createFromFormat('Y-m-d', $stayStart);
+            $endDate = \DateTime::createFromFormat('Y-m-d', $stayEnd);
+
+            if ($data['StayStart'] == $value['StayStart'] && $data['StayEnd'] == $value['StayEnd']) {
+                  $assignStatus = $value['AssignStatus'];
+            } else {
+                  $assignStatus = $data['AssignStatus'];
+            }
+            // calculate duration
+            $duration = $startDate->diff($endDate)->days;
+            $duration = $duration + 1;
+
+            // Merge two data items into one with expanded date range
+            return [
+                  "ClientID" => $data['ClientID'],
+                  "StaffID" => $data['StaffID'],
+                  "ServiceName" => $data['ServiceName'],
+                  "Date" => $data['Date'],
+                  "StayStart" => $stayStart,
+                  "StayEnd" => $stayEnd,
+                  "NominalServiceDuration" => $data['NominalServiceDuration'],
+                  "Duration" => $duration,
+                  "DisplayTime" => $data['DisplayTime'],
+                  "ScheduleTime" => $data['ScheduleTime'],
+                  "DiaryRef" => $data['DiaryRef'],
+                  "StaffFirstName" => $data['StaffFirstName'],
+                  "StaffLastName" => $data['StaffLastName'],
+                  "Acknowledged" => $data['Acknowledged'],
+                  "Area" => $data['Area'],
+                  "Status" => $data['Status'],
+                  "AssignStatus" => $assignStatus,
+                  "CheckIn" => $data['CheckIn'],
+                  "CheckOut" => $data['CheckOut'],
+                  "Qty" => $data['Qty'],
+                  "UnitPrice" => $data['UnitPrice'],
+                  "Total" => $data['UnitPrice'],
+                  "StaffPay" => $data['StaffPay'],
+                  "invoice" => $data['invoice'],
+                  "Address1" => $data['Address1'],
+                  "Address2" => $data['Address2'],
+                  "Address3" => $data['Address3'],
+                  "AddressTown" => $data['AddressTown'],
+                  "AddressState" => $data['AddressState'],
+                  "AddressZip" => $data['AddressZip'],
+                  "DogPhoto" => $data['DogPhoto']
+            ];
+      }
+
+      private function getParamCondition($data, $value)
+      {
+            // Check if two data items meet the conditions to be merged based on date range and name
+            $startDateA = new DateTime($data['StayStart']);
+            $endDateA = new DateTime($data['StayEnd']);
+            $startDateB = new DateTime($value['StayStart']);
+            $endDateB = new DateTime($value['StayEnd']);
+            $diffOne = $endDateA->diff($startDateB)->days;
+            $diffTwo = $endDateB->diff($startDateA)->days;
+
+            //Get Conditions
+            $datesCondition = ($diffOne === 1 || $diffTwo === 1 || $data['StayEnd'] === $value['StayStart'] || $value['StayEnd'] === $data['StayStart'] ||
+                  ($endDateA > $startDateB && $endDateA < $endDateB) || ($endDateB > $startDateA && $endDateB < $endDateA) ||
+                  $data['StayStart'] === $value['StayStart'] || $data['StayEnd'] === $value['StayEnd']);
+
+            $identityCondition = $data['ClientID'] == $value['ClientID'] && $data['StaffID'] == $value['StaffID'] && $data['DisplayTime'] == $value['DisplayTime'] &&
+                  $data['ScheduleTime'] == $value['ScheduleTime'] && $data['DiaryRef'] == $value['DiaryRef'] && $data['StaffFirstName'] == $value['StaffFirstName'] &&
+                  $data['StaffLastName'] == $value['StaffLastName'] && $data['Area'] == $value['Area'] && $data['Status'] == $value['Status'] &&
+                  $data['CheckIn'] == $value['CheckIn'] && $data['CheckOut'] == $value['CheckOut'] && $data['Qty'] == $value['Qty'] &&
+                  $data['UnitPrice'] == $value['UnitPrice'] && $data['Total'] == $value['Total'] && $data['StaffPay'] == $value['StaffPay'] &&
+                  $data['invoice'] == $value['invoice'];
+
+            $addressCondition = $data['Address1'] == $value['Address1'] && $data['Address2'] == $value['Address2'] &&
+                  $data['Address3'] == $value['Address3'] && $data['AddressTown'] == $value['AddressTown'] && $data['AddressState'] == $value['AddressState'] &&
+                  $data['AddressZip'] == $value['AddressZip'];
+
+            $conditions = $datesCondition && $identityCondition && $addressCondition;
+
+            return $conditions;
       }
 }
