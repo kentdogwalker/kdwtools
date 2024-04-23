@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Hotelbookings;
 use DateTime;
 use App\Models\Service;
 
@@ -321,6 +322,15 @@ class ServiceService
             if ($result === null) {
                   return $result = $data;
             }
+            // $hotelBookings = Hotelbookings::where('ClientID', $result['ClientID'])
+            //       ->where('Duration', $result['Duration'])
+            //       ->where('StayStart', $result['StayStart'])
+            //       ->where('StayEnd', $result['StayEnd'])
+            //       ->where('Status', $result['Status'])->first();
+            // if ($hotelBookings) {
+            //       $result['AssignStatus'] = 'Completed';
+            // }
+            // dd($result);
             return $result;
       }
 
@@ -332,11 +342,11 @@ class ServiceService
             $startDate = \DateTime::createFromFormat('Y-m-d', $stayStart);
             $endDate = \DateTime::createFromFormat('Y-m-d', $stayEnd);
 
-            if ($data['StayStart'] == $value['StayStart'] && $data['StayEnd'] == $value['StayEnd']) {
-                  $assignStatus = $value['AssignStatus'];
-            } else {
-                  $assignStatus = $data['AssignStatus'];
-            }
+            // if ($data['StayStart'] == $value['StayStart'] && $data['StayEnd'] == $value['StayEnd']) {
+            //       $assignStatus = $value['AssignStatus'];
+            // } else {
+            //       $assignStatus = $data['AssignStatus'];
+            // }
             // calculate duration
             $duration = $startDate->diff($endDate)->days;
             $duration = $duration + 1;
@@ -359,7 +369,7 @@ class ServiceService
                   "Acknowledged" => $data['Acknowledged'],
                   "Area" => $data['Area'],
                   "Status" => $data['Status'],
-                  "AssignStatus" => $assignStatus,
+                  "AssignStatus" => $data['AssignStatus'],
                   "CheckIn" => $data['CheckIn'],
                   "CheckOut" => $data['CheckOut'],
                   "Qty" => $data['Qty'],
