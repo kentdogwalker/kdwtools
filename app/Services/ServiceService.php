@@ -320,16 +320,16 @@ class ServiceService
             }
             // If no matching item is found, add item from array $a to the result
             if ($result === null) {
-                  return $result = $data;
+                  $result = $data;
             }
-            // $hotelBookings = Hotelbookings::where('ClientID', $result['ClientID'])
-            //       ->where('Duration', $result['Duration'])
-            //       ->where('StayStart', $result['StayStart'])
-            //       ->where('StayEnd', $result['StayEnd'])
-            //       ->where('Status', $result['Status'])->first();
-            // if ($hotelBookings) {
-            //       $result['AssignStatus'] = 'Completed';
-            // }
+            $hotelBookings = Hotelbookings::where('ClientID', $result['ClientID'])
+                  ->where('Duration', $result['Duration'])
+                  ->where('StayStart', $result['StayStart'])
+                  ->where('StayEnd', $result['StayEnd'])
+                  ->where('Status', $result['Status'])->first();
+            if ($hotelBookings) {
+                  $result['AssignStatus'] = 'Completed';
+            }
             // dd($result);
             return $result;
       }
