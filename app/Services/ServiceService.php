@@ -200,9 +200,6 @@ class ServiceService
                   ->where('Status', $key["Status"])
                   ->where('CheckIn', $key["CheckIn"])
                   ->where('CheckOut', $key["CheckOut"])
-                  ->where('Qty', $key["Qty"])
-                  ->where('UnitPrice', $key["UnitPrice"])
-                  ->where('Total', $key["Total"])
                   ->where('StaffPay', $key["StaffPay"])
                   ->where('invoice', $key["invoice"])
                   ->where('Address1', $key["Address1"])
@@ -342,11 +339,6 @@ class ServiceService
             $startDate = \DateTime::createFromFormat('Y-m-d', $stayStart);
             $endDate = \DateTime::createFromFormat('Y-m-d', $stayEnd);
 
-            // if ($data['StayStart'] == $value['StayStart'] && $data['StayEnd'] == $value['StayEnd']) {
-            //       $assignStatus = $value['AssignStatus'];
-            // } else {
-            //       $assignStatus = $data['AssignStatus'];
-            // }
             // calculate duration
             $duration = $startDate->diff($endDate)->days;
             $duration = $duration + 1;
@@ -405,8 +397,7 @@ class ServiceService
             $identityCondition = $data['ClientID'] == $value['ClientID'] && $data['StaffID'] == $value['StaffID'] && $data['DisplayTime'] == $value['DisplayTime'] &&
                   $data['ScheduleTime'] == $value['ScheduleTime'] && $data['DiaryRef'] == $value['DiaryRef'] && $data['StaffFirstName'] == $value['StaffFirstName'] &&
                   $data['StaffLastName'] == $value['StaffLastName'] && $data['Area'] == $value['Area'] && $data['Status'] == $value['Status'] &&
-                  $data['CheckIn'] == $value['CheckIn'] && $data['CheckOut'] == $value['CheckOut'] && $data['Qty'] == $value['Qty'] &&
-                  $data['UnitPrice'] == $value['UnitPrice'] && $data['Total'] == $value['Total'] && $data['StaffPay'] == $value['StaffPay'] &&
+                  $data['CheckIn'] == $value['CheckIn'] && $data['CheckOut'] == $value['CheckOut'] && $data['StaffPay'] == $value['StaffPay'] &&
                   $data['invoice'] == $value['invoice'];
 
             $addressCondition = $data['Address1'] == $value['Address1'] && $data['Address2'] == $value['Address2'] &&
