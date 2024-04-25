@@ -28,9 +28,10 @@ class HotelbookingsController extends Controller
         $services = Service::where('ServiceName', 'LIKE', "%Hotel Stay%")
             ->whereNot('Status', 'Cancelled')
             ->where('AssignStatus', 'Pending')
+            ->orderBy('StayStart', 'ASC')
             ->get();
         $pets = Pet::all();
-        $bookings = Hotelbookings::all();
+        $bookings = Hotelbookings::orderBy('StayStart', 'ASC')->get();
         confirmDelete('Are you sure?', 'You want to delete this booking?');
         return view('hotel.unassignedbookings', compact('services', 'pets', 'bookings'));
     }

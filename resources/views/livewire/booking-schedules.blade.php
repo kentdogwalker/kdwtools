@@ -67,7 +67,7 @@
                                     @endphp
                                     <td colspan="{{ $colspan }}" style="border: 1px solid #c3c7cc; width:12%;">
                                         <div class="card" style="background-color: #f1437d">
-                                            <div class="card-body">
+                                            <div class="card-body" style="padding-top: 7px; padding-bottom: 4px;">
                                                 <div class="col-lg-12 col-md-12 col-sm-12">
                                                     <div class="row text-sm text-white">
                                                         <div class="col-sm-12 col-md-6 col-lg-6">
@@ -107,17 +107,19 @@
                                                                         );
                                                                     }
                                                                 @endphp
-                                                                <div>
+                                                                <div style="position: relative; right: 24px;">
                                                                     <img src="{{ $src_image }}"
-                                                                        class="avatar avatar-sm me-3 border-radius-lg"
-                                                                        alt="{{ $item['clients']['dog_name'] }}">
+                                                                        class="avatar border-radius-lg"
+                                                                        alt="{{ $item['clients']['dog_name'] }}"
+                                                                        style="width: 80px;height: 80px;">
                                                                 </div>
-                                                                <div class="d-flex flex-column justify-content-center">
-                                                                    <h6 class="mb-0 text-sm text-white">
+                                                                <div class="d-flex flex-column justify-content-center"
+                                                                    style="right: 18px;bottom: 2px;position: relative;">
+                                                                    <h6 class="mb-0 text-white">
                                                                         {{ $item['clients']['dog_name'] }}
                                                                         @if ($item['clients']['breed'] !== null)
                                                                             <i
-                                                                                class="material-icons text-xm my-auto me-1">{{ strtolower($item['clients']['gender']) }}</i>
+                                                                                class="material-icons my-auto me-1">{{ strtolower($item['clients']['gender']) }}</i>
                                                                         @endif
                                                                     </h6>
                                                                     <p class="text-xs text-white mb-0">
@@ -128,7 +130,7 @@
                                                         </div>
                                                         <div class="col-sm-12 col-md-6 col-lg-6">
                                                             <div class="d-flex justify-content-end"
-                                                                style="top: -11px;position: relative;">
+                                                                style="top: -6px;position: relative;">
                                                                 <p style="font-size: 0.68rem" class="text-capitalize">
                                                                     {{ $item['clients']['owner_name'] }}
                                                                 </p>
