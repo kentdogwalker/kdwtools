@@ -25,7 +25,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\PspUploadController;
 use App\Http\Controllers\PublicHotelRoomController;
-
+use App\Livewire\PublicHotelRoom;
 
 Route::get('/', function () {
 	return redirect('sign-in');
@@ -46,7 +46,7 @@ Route::get('/reset-password/{token}', function ($token) {
 
 
 // Route for displaying public hotel room information
-Route::get('/rooms/{roomID}', [PublicHotelRoomController::class, 'show'])->name('rooms.show');
+Route::get('/rooms/{roomID}', PublicHotelRoom::class)->name('rooms.show');
 
 
 
@@ -55,15 +55,11 @@ Route::get('profile', [ProfileController::class, 'create'])->middleware('auth')-
 Route::post('user-profile', [ProfileController::class, 'update'])->middleware('auth');
 
 
-
-
-
-
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('billing', function () {
 		return view('pages.billing');
 	})->name('billing');
-    Route::get('dduploader', function () {
+	Route::get('dduploader', function () {
 		return view('dduploader.uploader');
 	})->name('dduploader');
 	Route::get('tables', function () {
