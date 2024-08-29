@@ -15,14 +15,17 @@ class RoomTableSeeder extends Seeder
     {
         // Define the list of rooms to insert
         $rooms = [
-            ['RoomID' => 1, 'RoomName' => 'London Suite'],
-            ['RoomID' => 2, 'RoomName' => 'New York Suite'],
-            ['RoomID' => 3, 'RoomName' => 'Parisian Suite'],
-            ['RoomID' => 4, 'RoomName' => 'Amsterdam Suite'], // Added comma
-            ['RoomID' => 5, 'RoomName' => 'Disney Suite'], // Added comma
-            ['RoomID' => 6, 'RoomName' => 'Hogwarts Suite'], // Added comma
-            ['RoomID' => 7, 'RoomName' => 'Star Wars Suite'], // Added comma
-            ['RoomID' => 8, 'RoomName' => 'Safari Suite'] // Corrected last item (no comma needed here)
+            ['RoomID' => 1, 'RoomName' => 'Disney Suite'],
+            ['RoomID' => 2, 'RoomName' => 'Hogwarts Suite'],
+            ['RoomID' => 3, 'RoomName' => 'Star Wars Suite'],
+            ['RoomID' => 4, 'RoomName' => 'Madagascar Suite'],
+            ['RoomID' => 5, 'RoomName' => 'Bangkok Suite'],
+            ['RoomID' => 6, 'RoomName' => 'New York Suite'],
+            ['RoomID' => 7, 'RoomName' => 'Parisian Suite'],
+            ['RoomID' => 8, 'RoomName' => 'London Suite'],
+            
+            //Changed room names and order to match layout of rooms.
+
             // Add more rooms as needed
         ];
 
